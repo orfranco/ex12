@@ -42,3 +42,16 @@ def test_is_valid_path():
     assert is_valid_path(BOARD_1, invalid_2, WORDS_1) is None
 
 
+def test_possible_cells():
+    path_1 = [(0,0), (0,1)]
+    path_2 = [(0,0), (0,1), (1,1)]
+    path_3 = [(0,0), (0,1), (1,1), (1,0)]
+    path_4 = [(0,1), (1,1), (1,0), (0,0)]
+    path_5 = [(0,0), (0,1), (0,2), (0,3), (1,3), (1,2), (1,1), (1,0), (2,0),
+              (2,1), (2,2), (2,3), (3,3), (3,2), (3,1), (3,0)]
+
+    assert sorted(possible_cells(path_1, BOARD_1)) == sorted([(0,2), (1,0), (1,1), (1,2)])
+    assert sorted(possible_cells(path_2, BOARD_1)) == sorted([(1,0), (0,2), (1,2), (2,0), (2,1), (2,2)])
+    assert sorted(possible_cells(path_3, BOARD_1)) == sorted([(2,0), (2,1)])
+    assert sorted(possible_cells(path_4, BOARD_1)) == []
+    assert sorted(possible_cells(path_5, BOARD_1)) == []
