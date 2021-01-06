@@ -51,5 +51,47 @@ def is_valid_path(board: List[List[str]],
     return
 
 
-def find_length_n_words(n, board, words):
-    pass
+def find_length_n_words(n: int, board: List[List[str]], words: Dict):
+    """
+
+    :param n: the length of the words needed to be found.
+    :param board: the board to search on.
+    :param words: a dictionary containing all the valid words that can be found
+                    on a board.
+    :return: all the valid words from length n, that the board contains.
+    """
+    all_valid_paths = []
+    # start the helper function, from any coordinate in the board:
+    for row in range(len(board)):
+        for col in range(len(board)):
+            all_valid_paths.append(
+                _helper_find_length_n_words(n, board, words, [(row, col)], []))
+
+    return all_valid_paths
+
+
+def _helper_find_length_n_words(n, board, words, curr_path, valid_paths_list):
+    """
+
+    :param n: the length of the words needed to be found.
+    :param board: the board to search on.
+    :param words: a dictionary containing all the valid words that can be found
+                    on a board.
+    :param curr_path: a list of tuples, representing the coordinates of the
+     characters that the word was formed from.
+    :param valid_paths_list: a list that will contains all the
+                            valid path lists.
+    :return: a list that contains all the valid path lists of words with
+            length n.
+    """
+    # base case:
+    if len(curr_path) == n:
+        if is_valid_path(board, curr_path, words):
+            valid_paths_list.append(curr_path)
+        return valid_paths_list
+
+    for cell in possible_cells(curr_path, board):
+        _helper_find_length_n_words(n, board, words, curr_path + [cell],
+                                    valid_paths_list)
+
+    return valid_paths_list
