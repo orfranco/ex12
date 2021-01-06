@@ -21,7 +21,6 @@ def load_words_dict(file_path: str):
             if replaced_line:
                 words_dict[line.replace("\n", "")] = True
 
-
     return words_dict
 
 
