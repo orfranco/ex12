@@ -85,8 +85,7 @@ class BoggleGui:
                                      **RIGHT_LABEL_STYLE, height=1,
                                      text="0")
         self._create_start_clear_frame()
-        self._words_label = tk.Label(self._right_frame, **RIGHT_LABEL_STYLE,
-                                     height=4)
+        self._create_scrollbar_frame()
         self._check_button = tk.Button(self._right_frame, text="Check!",
                                        **START_CLEAR_BUTTON_STYLE)
 
@@ -101,6 +100,14 @@ class BoggleGui:
                                        **START_CLEAR_BUTTON_STYLE,
                                        command=self._start_game)
 
+    def _create_scrollbar_frame(self):
+        self._scrollbar_frame = tk.Frame(self._right_frame, bg=REGULAR_COLOR)
+        self._words_scrollbar = tk.Scrollbar(self._scrollbar_frame)
+        self._found_words_list = \
+            tk.Listbox(self._scrollbar_frame,
+                       yscrollcommand=self._words_scrollbar.set, width=26)
+        self._found_words_list.insert(tk.END, "a word")
+
     def _pack(self):
         self._left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self._curr_word_label.pack(side=tk.TOP, fill=tk.BOTH)
@@ -113,7 +120,9 @@ class BoggleGui:
         self._start_clear_frame.pack(side=tk.TOP)
         self._clear_button.pack(side=tk.LEFT)
         self._start_button.pack(side=tk.LEFT)
-        self._words_label.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self._scrollbar_frame.pack(side=tk.TOP, fill=tk.Y)
+        self._words_scrollbar.pack(side=tk.RIGHT, fill=tk.BOTH)
+        self._found_words_list.pack(side=tk.LEFT)
         self._check_button.pack(side=tk.TOP, fill=tk.BOTH,expand=True)
 
     def run(self):

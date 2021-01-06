@@ -50,7 +50,6 @@ class BoggleController:
         self.__logic.clear_path()
         self.__gui.update_curr_word_label("", True)
 
-
     def run(self):
         self.__gui.run()
 
