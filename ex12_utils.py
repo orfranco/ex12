@@ -30,7 +30,8 @@ def is_valid_path(board: List[List[str]],
                   path: List[Tuple[int, int]],
                   words: Dict) -> Optional[str]:
     """
-    TODO
+    This function checks if the given path (list of coordinates on the board)
+
     :param board:
     :param path:
     :param words:
