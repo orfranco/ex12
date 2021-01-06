@@ -73,11 +73,12 @@ class BoggleGui:
 
     def _init_left_frame(self):
         self._left_frame = tk.Frame(self._main_window, bg=REGULAR_COLOR)
-        self._curr_word_label = tk.Label(self._left_frame, **LEFT_LABEL_STYLE)
+        self._curr_word_label = tk.Label(self._left_frame,
+                                         text="", **LEFT_LABEL_STYLE)
         self._progress_label = tk.Label(self._left_frame, **LEFT_LABEL_STYLE)
         self._buttons_frame = tk.Frame(self._left_frame)
         self._chars_buttons: Dict[tk.Button, str] = dict()
-        self._chars_buttons_coords: Dict[tk.Button, Tuple[int, int]] = dict()
+        self._chars_coords: Dict[Tuple[int, int], str] = dict()
         self._create_chars_grid(self._board)
 
     def _create_chars_grid(self, board):
@@ -100,7 +101,7 @@ class BoggleGui:
                     sticky=tk.NSEW)
 
         self._chars_buttons[button] = button_char
-        self._chars_buttons_coords[button] = (row, col)
+        self._chars_coords[(row, col)] = button_char
 
         def _on_enter(event: Any) -> None:
             button['background'] = BUTTON_HOVER_COLOR
@@ -177,12 +178,20 @@ class BoggleGui:
         """
         return self._chars_buttons
 
-    def get_chars_buttons_coords(self) -> Dict[tk.Button, Tuple[int, int]]:
+    def get_chars_buttons_coords(self) -> Dict[Tuple[int, int], str]:
         """
         TODO
         :return:
         """
-        return self._chars_buttons_coords
+        return self._chars_coords
+
+    def set_button_command(self, button_char, action):
+        for button, char in self._chars_buttons.items():
+            if button_char == char:
+                button["command"] = action
+
+    def update_curr_word_label(self, char):
+        self._curr_word_label["text"] += char
 
 
 WORDS_FILE = "boggle_dict.txt"
@@ -198,8 +207,19 @@ class BoggleController:
         self.__gui = BoggleGui(self.__board, Timer())
         self.__logic = BoggleLogic(self.__words_dict, self.__board)
 
-        for coord in self.__gui.get_chars_buttons_coords().values():
-            pass
+        for coord, char in self.__gui.get_chars_buttons_coords().items():
+            action = self._create_button_action(coord, char)
+            self.__gui.set_button_command(char, action)
+
+    def _create_button_action(self, coord, char):
+        def command():
+            self.__logic.insert_coord_to_path(coord)
+            self.__gui.update_curr_word_label(char)
+
+        return command
+
+    def run(self):
+        self.__gui.run()
 
 
 class Timer:
@@ -252,6 +272,4 @@ def convert_to_minutes_format(time_in_secs: int) -> str:
 
     return f"{minutes}:{seconds}"
 
-
-boggle = BoggleGui(randomize_board(),Timer())
-boggle.run()
+BoggleController().run()
