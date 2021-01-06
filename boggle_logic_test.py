@@ -1,4 +1,4 @@
-from boggle import *
+from boggle_logic import *
 
 
 def test_convert_to_minutes_format():

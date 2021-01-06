@@ -43,9 +43,14 @@ def is_valid_path(board: List[List[str]],
     #       Should we raise exception when a coordinate is outside the board?
     word: str = ""
 
-    for coord in path:
+    for index_in_path, coord in enumerate(path):
         row_index, col_index = coord[ROW_INDEX], coord[COL_INDEX]
-        if coord_in_board(coord, board):
+
+        if index_in_path == 0:
+            if coord_in_board(coord, board):
+                word += board[row_index][col_index]
+
+        elif coord in possible_cells(path[:index_in_path], board):
             word += board[row_index][col_index]
 
     if word in words:
