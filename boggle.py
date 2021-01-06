@@ -160,6 +160,7 @@ class BoggleGui:
         self._timer_label["text"] = self._timer.get_time()
         self._main_window.after(100)
 
+
 class BoggleController:
     """
     TODO
@@ -175,9 +176,13 @@ class Timer:
     STARTING_TIME: int = 180  # Seconds
 
     def __init__(self):
+        self.__start_time = 0
+        self.__end_time = 0
+        self.__current_time = Timer.STARTING_TIME
+
+    def start_timer(self):
         self.__start_time = int(time.time())
         self.__end_time = self.__start_time + 180
-        self.__current_time = Timer.STARTING_TIME
 
     def _calculate_time(self) -> Optional[int]:
         """
@@ -216,7 +221,6 @@ def convert_to_minutes_format(time_in_secs: int) -> str:
         seconds = f"0{seconds}"
 
     return f"{minutes}:{seconds}"
-
 
 
 boggle = BoggleGui(randomize_board(),Timer())

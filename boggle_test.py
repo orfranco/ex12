@@ -11,6 +11,7 @@ def test_convert_to_minutes_format():
 
 def test_timer():
     timer = Timer()
+    timer.start_timer()
     for i in range(5):
         time.sleep(1)
         assert timer.get_time() == f"2:{59 - i}"
