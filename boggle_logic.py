@@ -10,8 +10,10 @@ class BoggleLogic:
         self.__words_dict = words_dict
         self.__board = board
         self.__curr_path = []
+        self._found_word = set()
         self.__curr_word_length = 0
         self.__score = STARTING_SCORE
+        self._game_started = False
 
     def update_score(self, n):
         self.__score += n ** 2
@@ -35,8 +37,9 @@ class BoggleLogic:
         word = utils.is_valid_path(self.__board,
                                    self.__curr_path,
                                    self.__words_dict)
-        if word:
+        if word and word not in self._found_word:
             self.update_score(self.__curr_word_length)
+            self._found_word.add(word)
             return word
         return
 
@@ -45,6 +48,16 @@ class BoggleLogic:
 
     def get_path(self):
         return self.__curr_path
+
+    def start_game(self):
+        if self._game_started:
+            self.__curr_path = []
+            self._found_word = set()
+            self.__curr_word_length = 0
+            self.__score = STARTING_SCORE
+            self._game_started = False
+        else:
+            self._game_started = True
 
 
 class Timer:

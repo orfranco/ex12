@@ -97,16 +97,16 @@ class BoggleGui:
                                        **START_CLEAR_BUTTON_STYLE)
         self._start_button = tk.Button(self._start_clear_frame,
                                        text="Start",
-                                       **START_CLEAR_BUTTON_STYLE,
-                                       command=self._start_game)
+                                       **START_CLEAR_BUTTON_STYLE)
 
     def _create_scrollbar_frame(self):
+        # TODO: leyafyef.
         self._scrollbar_frame = tk.Frame(self._right_frame, bg=REGULAR_COLOR)
         self._words_scrollbar = tk.Scrollbar(self._scrollbar_frame)
         self._found_words_list = \
             tk.Listbox(self._scrollbar_frame,
-                       yscrollcommand=self._words_scrollbar.set, width=26)
-        self._found_words_list.insert(tk.END, "a word")
+                       yscrollcommand=self._words_scrollbar.set,
+                       width=26, height=11)
 
     def _pack(self):
         self._left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -128,7 +128,7 @@ class BoggleGui:
     def run(self):
         self._main_window.mainloop()
 
-    def _start_game(self):
+    def start_game(self, new_board):
         if self._start_button["text"] == "Start":
             self._start_button["text"] = "Stop"
             for button, button_data in self._chars_buttons.items():
@@ -136,7 +136,15 @@ class BoggleGui:
             self._timer.start_timer()
             self._animate_timer()
         else:
-            pass
+            self._start_button["text"] = "Start"
+            self._board = new_board
+            self._curr_word_label["text"] = ""
+            self._score_label["text"] = "0"
+            self._timer_label["text"] = ""
+            self._found_words_list.delete(0, tk.END)
+            self._main_window.after_cancel(self._timer_animator_id)
+
+
 
     def _animate_timer(self):
         self._timer_label["text"] = self._timer.get_time()
@@ -160,6 +168,9 @@ class BoggleGui:
     def set_check_command(self, action):
         self._check_button["command"] = action
 
+    def set_start_stop_command(self, action):
+        self._start_button["command"] = action
+
     def update_curr_word_label(self, char, is_clear=False):
         if not is_clear:
             self._curr_word_label["text"] += char
@@ -168,4 +179,4 @@ class BoggleGui:
 
     def good_choice(self, score, word):
         self._score_label["text"] = score
-        self._found_words_list.insert(word)
+        self._found_words_list.insert(tk.END, word)

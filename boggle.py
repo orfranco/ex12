@@ -19,6 +19,9 @@ class BoggleController:
         self.__gui = BoggleGui(self.__board, Timer())
         self.__logic = BoggleLogic(self.__words_dict, self.__board)
 
+        start_stop_action = self._create_start_stop_button_action()
+        self.__gui.set_start_stop_command(start_stop_action)
+
         for button, data in self.__gui.get_chars_buttons().items():
             action = self._create_grid_button_action(data[COORD_INDEX], button)
             self.__gui.set_grid_button_command(button, action)
@@ -28,6 +31,14 @@ class BoggleController:
 
         check_action = self._create_check_button_action()
         self.__gui.set_check_command(check_action)
+
+    def _create_start_stop_button_action(self):
+        def command():
+            self.__board = randomize_board()
+            self.__gui.start_game(randomize_board())
+            self.__logic.start_game()
+
+        return command
 
     def _create_grid_button_action(self, coord, button):
         def command():
@@ -44,11 +55,13 @@ class BoggleController:
         return command
 
     def _create_check_button_action(self):
-        word = self.__logic.check_path()
-        if word:
-            self.__gui.good_choice(self.__logic.get_score(), word)
-        self.__logic.clear_path()
-        self.__gui.update_curr_word_label("", True)
+        def command():
+            word = self.__logic.check_path()
+            if word:
+                self.__gui.good_choice(self.__logic.get_score(), word)
+            self.__logic.clear_path()
+            self.__gui.update_curr_word_label("", True)
+        return command
 
     def run(self):
         self.__gui.run()
