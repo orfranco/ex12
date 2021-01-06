@@ -1,7 +1,7 @@
 import ex12_utils as utils
 import time
 import tkinter as tk
-from typing import Optional, Any
+from typing import Optional, Any, Dict, Tuple
 from boggle_board_randomizer import *
 
 STARTING_SCORE = 0
@@ -76,7 +76,8 @@ class BoggleGui:
         self._curr_word_label = tk.Label(self._left_frame, **LEFT_LABEL_STYLE)
         self._progress_label = tk.Label(self._left_frame, **LEFT_LABEL_STYLE)
         self._buttons_frame = tk.Frame(self._left_frame)
-        self._grid_buttons = dict()
+        self._chars_buttons: Dict[tk.Button, str] = dict()
+        self._chars_buttons_coords: Dict[tk.Button, Tuple[int, int]] = dict()
         self._create_chars_grid(self._board)
 
     def _create_chars_grid(self, board):
@@ -98,7 +99,8 @@ class BoggleGui:
                     column=col,
                     sticky=tk.NSEW)
 
-        self._grid_buttons[button] = button_char
+        self._chars_buttons[button] = button_char
+        self._chars_buttons_coords[button] = (row, col)
 
         def _on_enter(event: Any) -> None:
             button['background'] = BUTTON_HOVER_COLOR
@@ -155,7 +157,7 @@ class BoggleGui:
     def _start_game(self):
         if self._start_button["text"] == "Start":
             self._start_button["text"] = "Stop"
-            for button, button_char in self._grid_buttons.items():
+            for button, button_char in self._chars_buttons.items():
                 button["text"] = button_char
             self._timer.start_timer()
             self._animate_timer()
@@ -168,12 +170,36 @@ class BoggleGui:
             self._timer_animator_id = \
                 self._main_window.after(100, self._animate_timer)
 
+    def get_chars_buttons(self) -> Dict[tk.Button, str]:
+        """
+        TODO
+        :return:
+        """
+        return self._chars_buttons
+
+    def get_chars_buttons_coords(self) -> Dict[tk.Button, Tuple[int, int]]:
+        """
+        TODO
+        :return:
+        """
+        return self._chars_buttons_coords
+
+
+WORDS_FILE = "boggle_dict.txt"
+
+
 class BoggleController:
     """
     TODO
     """
     def __init__(self):
-        pass
+        self.__board = randomize_board()
+        self.__words_dict = utils.load_words_dict(WORDS_FILE)
+        self.__gui = BoggleGui(self.__board, Timer())
+        self.__logic = BoggleLogic(self.__words_dict, self.__board)
+
+        for coord in self.__gui.get_chars_buttons_coords().values():
+            pass
 
 
 class Timer:
