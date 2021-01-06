@@ -44,7 +44,7 @@ BUTTON_STYLE = {"font": ("Courier", 30),
                 "bg": REGULAR_COLOR,
                 "activebackground": BUTTON_ACTIVE_COLOR}
 
-START_RESTART_BUTTON_STYLE = {"font": ("Courier", 14),
+START_CLEAR_BUTTON_STYLE = {"font": ("Courier", 14),
                               "borderwidth": 1,
                               "relief": tk.RAISED,
                               "bg": REGULAR_COLOR,
@@ -75,20 +75,6 @@ class BoggleGui:
         self._buttons_frame = tk.Frame(self._left_frame)
         self._grid_buttons = dict()
         self._create_chars_grid(self._board)
-
-    def _init_right_frame(self):
-        self._right_frame = tk.Frame(self._main_window, bg=REGULAR_COLOR)
-        self._timer_label = tk.Label(self._right_frame,
-                                     **RIGHT_LABEL_STYLE, height=1
-                                     , text="03:00")
-        self._score_label = tk.Label(self._right_frame,
-                                     **RIGHT_LABEL_STYLE, height=1,
-                                     text="0")
-        self._create_start_restart_frame()
-        self._words_label = tk.Label(self._right_frame, **RIGHT_LABEL_STYLE,
-                                     height=4)
-        self._check_button = tk.Button(self._right_frame,text="Check!",
-                                       **START_RESTART_BUTTON_STYLE)
 
     def _create_chars_grid(self, board):
         for row in range(len(board)):
@@ -121,16 +107,29 @@ class BoggleGui:
         button.bind("<Leave>", _on_leave)
         return button
 
-    def _create_start_restart_frame(self):
-        self._start_restart_frame = tk.Frame(self._right_frame,
-                                             bg=REGULAR_COLOR)
-        self._start_button = tk.Button(self._start_restart_frame,
+    def _init_right_frame(self):
+        self._right_frame = tk.Frame(self._main_window, bg=REGULAR_COLOR)
+        self._timer_label = tk.Label(self._right_frame,
+                                     **RIGHT_LABEL_STYLE, height=1)
+        self._score_label = tk.Label(self._right_frame,
+                                     **RIGHT_LABEL_STYLE, height=1,
+                                     text="0")
+        self._create_start_clear_frame()
+        self._words_label = tk.Label(self._right_frame, **RIGHT_LABEL_STYLE,
+                                     height=4)
+        self._check_button = tk.Button(self._right_frame, text="Check!",
+                                       **START_CLEAR_BUTTON_STYLE)
+
+    def _create_start_clear_frame(self):
+        self._start_clear_frame = tk.Frame(self._right_frame,
+                                           bg=REGULAR_COLOR)
+        self._clear_button = tk.Button(self._start_clear_frame,
+                                       text="Clear",
+                                       **START_CLEAR_BUTTON_STYLE)
+        self._start_button = tk.Button(self._start_clear_frame,
                                        text="Start",
-                                       **START_RESTART_BUTTON_STYLE,
+                                       **START_CLEAR_BUTTON_STYLE,
                                        command=self._start_game)
-        self._restart_button = tk.Button(self._start_restart_frame,
-                                         text="Restart",
-                                         **START_RESTART_BUTTON_STYLE)
 
     def _pack(self):
         self._left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -141,9 +140,9 @@ class BoggleGui:
         self._right_frame.pack(fill=tk.BOTH, expand=True)
         self._timer_label.pack(side=tk.TOP)
         self._score_label.pack(side=tk.TOP)
-        self._start_restart_frame.pack(side=tk.TOP)
+        self._start_clear_frame.pack(side=tk.TOP)
+        self._clear_button.pack(side=tk.LEFT)
         self._start_button.pack(side=tk.LEFT)
-        self._restart_button.pack(side=tk.LEFT)
         self._words_label.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         self._check_button.pack(side=tk.TOP, fill=tk.BOTH,expand=True)
 
@@ -151,15 +150,20 @@ class BoggleGui:
         self._main_window.mainloop()
 
     def _start_game(self):
-        for button, button_char in self._grid_buttons.items():
-            button["text"] = button_char
-        self._timer.start_timer()
-        self._animate_timer()
+        if self._start_button["text"] == "Start":
+            self._start_button["text"] = "Stop"
+            for button, button_char in self._grid_buttons.items():
+                button["text"] = button_char
+            self._timer.start_timer()
+            self._animate_timer()
+        else:
+            pass
 
     def _animate_timer(self):
         self._timer_label["text"] = self._timer.get_time()
-        self._main_window.after(100)
-
+        if self._timer_label["text"] != "0:00":
+            self._timer_animator_id = \
+                self._main_window.after(100, self._animate_timer)
 
 class BoggleController:
     """
