@@ -12,7 +12,7 @@ def load_words_dict(file_path: str):
     :return: a dictionary containing the words on the file as keys, and True
     for all the values.
     """
-    # TODO: think about test cases.
+    # TODO: think about more test cases.
     words_dict = dict()
 
     with open(file_path, 'r') as words_file:
