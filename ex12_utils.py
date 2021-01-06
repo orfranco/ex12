@@ -53,7 +53,8 @@ def is_valid_path(board: List[List[str]],
 
 def find_length_n_words(n: int, board: List[List[str]], words: Dict):
     """
-
+    this function finds all the valid words in length n that the given
+    board contains.
     :param n: the length of the words needed to be found.
     :param board: the board to search on.
     :param words: a dictionary containing all the valid words that can be found
@@ -72,7 +73,8 @@ def find_length_n_words(n: int, board: List[List[str]], words: Dict):
 
 def _helper_find_length_n_words(n, board, words, curr_path, valid_paths_list):
     """
-
+    this function finds all the valid words in length n that the given
+    board contains.
     :param n: the length of the words needed to be found.
     :param board: the board to search on.
     :param words: a dictionary containing all the valid words that can be found
