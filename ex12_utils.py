@@ -5,7 +5,8 @@ ROW_INDEX = 0
 COLUMN_INDEX = 1
 COORD_NEIGHBORS = [(-1, -1), (-1, 0), (-1, 1), (0, -1),
                    (0, 1), (1, -1), (1, 0), (1, 1)]
-
+MIN_WORD_LENGTH = 3
+MAX_WORD_LENGTH = 16
 
 def load_words_dict(file_path: str):
     """
@@ -102,13 +103,16 @@ def find_length_n_words(n: int, board: List[List[str]], words: Dict):
     :return: all the valid words from length n, that the board contains.
     """
     all_valid_paths = []
+    length_n_words = set(filter(lambda x: len(x) == n, words))
+
     # start the helper function, from any coordinate in the board:
-    for row in range(len(board)):
-        for col in range(len(board)):
-            all_valid_paths.extend(
-                list(_helper_find_length_n_words(n, board, words,
-                                                 board[row][col],
-                                                 [(row, col)], [])))
+    if MIN_WORD_LENGTH <= n <= MAX_WORD_LENGTH:
+        for row in range(len(board)):
+            for col in range(len(board)):
+                all_valid_paths.extend(
+                    list(_helper_find_length_n_words(n, board, length_n_words,
+                                                     board[row][col],
+                                                     [(row, col)], [])))
 
     return all_valid_paths
 
@@ -131,8 +135,15 @@ def _helper_find_length_n_words(n, board, words, curr_word,
     """
     # base case:
     if len(curr_path) == n:
-        if is_valid_path(board, curr_path, words):
+        if curr_word in words:
             valid_paths_list.append((curr_word, curr_path))
+        return valid_paths_list
+
+    good_word = False
+    for word in words:
+        if word.startswith(curr_word):
+            good_word = True
+    if not good_word:
         return valid_paths_list
 
     for cell in possible_cells(curr_path, board):
