@@ -148,6 +148,9 @@ class BoggleGui:
     def set_clear_command(self, action):
         self._clear_button["command"] = action
 
+    def set_check_command(self, action):
+        self._check_button["command"] = action
+
     def update_curr_word_label(self, char, is_clear=False):
         if not is_clear:
             self._curr_word_label["text"] += char
