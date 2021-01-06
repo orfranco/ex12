@@ -35,14 +35,15 @@ class BoggleLogic:
 
 COURIER_30 = ("Courier", 30)
 
-BUTTON_HOVER_COLOR = 'tomato'
-REGULAR_COLOR = 'steel blue'
-BUTTON_ACTIVE_COLOR = 'gold'
+BUTTON_HOVER_COLOR = 'sky blue'
+REGULAR_COLOR = 'azure'
+BUTTON_ACTIVE_COLOR = 'dark turquoise'
 BUTTON_STYLE = {"font": ("Courier", 30),
                 "borderwidth": 1,
                 "relief": tk.RAISED,
                 "bg": REGULAR_COLOR,
                 "activebackground": BUTTON_ACTIVE_COLOR}
+
 START_RESTART_BUTTON_STYLE = {"font": ("Courier", 14),
                               "borderwidth": 1,
                               "relief": tk.RAISED,
@@ -54,6 +55,7 @@ LEFT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
 
 RIGHT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
                      "width": 7, "relief": "ridge"}
+
 
 class BoggleGui:
     def __init__(self, board, timer):
@@ -84,7 +86,9 @@ class BoggleGui:
                                      text="0")
         self._create_start_restart_frame()
         self._words_label = tk.Label(self._right_frame, **RIGHT_LABEL_STYLE,
-                                     height=6)
+                                     height=4)
+        self._check_button = tk.Button(self._right_frame,text="Check!",
+                                       **START_RESTART_BUTTON_STYLE)
 
     def _create_chars_grid(self, board):
         for row in range(len(board)):
@@ -95,20 +99,17 @@ class BoggleGui:
             for col_index, char in enumerate(row):
                 self._make_button_on_grid(char, row_index, col_index)
 
-    def _make_button_on_grid(self, button_char: str, row: int, col: int,
-                             rowspan: int = 1,
-                             columnspan: int = 1) -> tk.Button:
+    def _make_button_on_grid(self, button_char: str,
+                             row: int, col: int,) -> tk.Button:
 
         button = tk.Button(self._buttons_frame,
-                           text=button_char,
+                           text="",
                            **BUTTON_STYLE)
         button.grid(row=row,
                     column=col,
-                    rowspan=rowspan,
-                    columnspan=columnspan,
                     sticky=tk.NSEW)
 
-        self._grid_buttons[button_char] = button
+        self._grid_buttons[button] = button_char
 
         def _on_enter(event: Any) -> None:
             button['background'] = BUTTON_HOVER_COLOR
@@ -125,7 +126,8 @@ class BoggleGui:
                                              bg=REGULAR_COLOR)
         self._start_button = tk.Button(self._start_restart_frame,
                                        text="Start",
-                                       **START_RESTART_BUTTON_STYLE)
+                                       **START_RESTART_BUTTON_STYLE,
+                                       command=self._start_game)
         self._restart_button = tk.Button(self._start_restart_frame,
                                          text="Restart",
                                          **START_RESTART_BUTTON_STYLE)
@@ -143,10 +145,20 @@ class BoggleGui:
         self._start_button.pack(side=tk.LEFT)
         self._restart_button.pack(side=tk.LEFT)
         self._words_label.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self._check_button.pack(side=tk.TOP, fill=tk.BOTH,expand=True)
 
     def run(self):
         self._main_window.mainloop()
 
+    def _start_game(self):
+        for button, button_char in self._grid_buttons.items():
+            button["text"] = button_char
+        self._timer.start_timer()
+        self._animate_timer()
+
+    def _animate_timer(self):
+        self._timer_label["text"] = self._timer.get_time()
+        self._main_window.after(100)
 
 class BoggleController:
     """
