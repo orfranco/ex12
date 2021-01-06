@@ -49,12 +49,13 @@ class BoggleLogic:
     def get_path(self):
         return self.__curr_path
 
-    def start_game(self):
+    def start_game(self, new_board):
         if self._game_started:
             self.__curr_path = []
             self._found_word = set()
             self.__curr_word_length = 0
             self.__score = STARTING_SCORE
+            self.__board = new_board
             self._game_started = False
         else:
             self._game_started = True

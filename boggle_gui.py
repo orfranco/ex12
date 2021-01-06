@@ -151,6 +151,7 @@ class BoggleGui:
                         = (new_board[row][col],(row, col))
                     self._coords_buttons[(row, col)]["text"] = ""
 
+
     def _animate_timer(self):
         self._timer_label["text"] = self._timer.get_time()
         if self._timer_label["text"] != "0:00":

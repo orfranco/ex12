@@ -35,8 +35,8 @@ class BoggleController:
     def _create_start_stop_button_action(self):
         def command():
             self.__board = randomize_board()
-            self.__gui.start_game(randomize_board())
-            self.__logic.start_game()
+            self.__gui.start_game(self.__board)
+            self.__logic.start_game(self.__board)
 
         return command
 
