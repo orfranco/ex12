@@ -1,8 +1,10 @@
 from typing import List, Tuple, Dict, Optional
 
 # Constants:
-ROW_COORD_IND = 0
-COLUMN_COORD_IND = 1
+ROW_INDEX = 0
+COLUMN_INDEX = 1
+COORD_NEIGHBORS = [(-1, -1), (-1, 0), (-1, 1), (0, -1),
+                   (0, 1), (1, -1), (1, 0), (1, 1)]
 
 
 def load_words_dict(file_path: str):
@@ -36,19 +38,56 @@ def is_valid_path(board: List[List[str]],
     """
     # TODO: Should we make sure the board contains only string (and not ints)?
     #       Should we raise exception when a coordinate is outside the board?
-    board_size: int = len(board)  # Should be a square
     word: str = ""
 
     for coord in path:
-        row_index, col_index = coord[ROW_COORD_IND], coord[COLUMN_COORD_IND]
-
-        if 0 <= row_index < board_size and 0 <= col_index < board_size:
+        row_index, col_index = coord[ROW_INDEX], coord[COLUMN_INDEX]
+        if coord_in_board(coord, board):
             word += board[row_index][col_index]
 
     if word in words:
         return word
 
     return
+
+
+def coord_in_board(coord: Tuple[int, int], board: List[List[str]]) -> bool:
+    """
+
+    :param coord:
+    :param board:
+    :return:
+    """
+    board_size: int = len(board)  # Board should always be a square.
+    row_index, col_index = coord[ROW_INDEX], coord[COLUMN_INDEX]
+
+    if 0 <= row_index < board_size and 0 <= col_index < board_size:
+        return True
+
+    return False
+
+
+def possible_cells(path: List[Tuple[int,int]],
+                   board: List[List[str]]) -> List[Tuple[int, int]]:
+    """
+    TODO
+    :param path:
+    :param board:
+    :return:
+    """
+    current_coord: Tuple[int, int] = path[-1]
+    coord_row = current_coord[ROW_INDEX]
+    coord_col = current_coord[COLUMN_INDEX]
+
+    possible_neighbors: List[Tuple[int, int]] = []
+    for neighbor in COORD_NEIGHBORS:
+        neighbor = (neighbor[ROW_INDEX] + coord_row,
+                    neighbor[COLUMN_INDEX] + coord_col)
+
+        if coord_in_board(neighbor, board) and neighbor not in path:
+            possible_neighbors.append(neighbor)
+
+    return possible_neighbors
 
 
 def find_length_n_words(n: int, board: List[List[str]], words: Dict):
