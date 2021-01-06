@@ -61,12 +61,12 @@ def test_possible_cells():
     path_3 = [(0,0), (0,1), (1,1), (1,0)]
     path_4 = [(0,1), (1,1), (1,0), (0,0)]
 
-
     assert sorted(possible_cells(path_1, BOARD_1)) == sorted([(0,2), (1,0), (1,1), (1,2)])
     assert sorted(possible_cells(path_2, BOARD_1)) == sorted([(1,0), (0,2), (1,2), (2,0), (2,1), (2,2)])
     assert sorted(possible_cells(path_3, BOARD_1)) == sorted([(2,0), (2,1)])
     assert sorted(possible_cells(path_4, BOARD_1)) == []
     assert sorted(possible_cells(all_chars_1, BOARD_1)) == []
+
 
 def test_find_length_n_words():
     find_6 = find_length_n_words(6, BOARD_1, WORDS_1)

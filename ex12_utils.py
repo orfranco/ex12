@@ -60,6 +60,7 @@ def coord_in_board(coord: Tuple[int, int], board: List[List[str]]) -> bool:
     :param board:
     :return:
     """
+    # TODO: Will the board always be a square?
     board_size: int = len(board)  # Board should always be a square.
     row_index, col_index = coord[ROW_INDEX], coord[COL_INDEX]
 
