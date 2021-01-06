@@ -8,6 +8,7 @@ COORD_NEIGHBORS = [(-1, -1), (-1, 0), (-1, 1), (0, -1),
 MIN_WORD_LENGTH = 3
 MAX_WORD_LENGTH = 16
 
+
 def load_words_dict(file_path: str):
     """
 
