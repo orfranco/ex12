@@ -10,7 +10,7 @@ class BoggleLogic:
         self.__words_dict = words_dict
         self.__board = board
         self.__curr_path = []
-        self.__found_words = set()
+        self.__curr_word_length = 0
         self.__score = STARTING_SCORE
 
     def update_score(self, n):
@@ -21,17 +21,30 @@ class BoggleLogic:
 
     def insert_coord_to_path(self, coord):
         self.__curr_path.append(coord)
+        self.__curr_word_length += len(self.__board[coord[0]][coord[1]])
 
-    def pop_coord_from_path(self):
+    def pop_coord_from_path(self, coord):
         self.__curr_path.pop()
+        self.__curr_word_length -= len(self.__board[coord[0]][coord[1]])
 
     def clear_path(self):
         self.__curr_path = []
+        self.__curr_word_length = 0
 
     def check_path(self) -> Optional[str]:
-        return utils.is_valid_path(self.__board,
+        word = utils.is_valid_path(self.__board,
                                    self.__curr_path,
                                    self.__words_dict)
+        if word:
+            self.update_score(self.__curr_word_length)
+            return word
+        return
+
+    def get_curr_word_len(self):
+        return self.__curr_word_length
+
+    def get_path(self):
+        return self.__curr_path
 
 
 class Timer:

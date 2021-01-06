@@ -142,9 +142,18 @@ class BoggleGui:
         """
         return self._chars_buttons
 
-    def set_button_command(self, button, action):
+    def set_grid_button_command(self, button, action):
         button["command"] = action
 
-    def update_curr_word_label(self, button):
-        self._curr_word_label["text"] += button["text"]
+    def set_clear_command(self, action):
+        self._clear_button["command"] = action
 
+    def update_curr_word_label(self, char, is_clear=False):
+        if not is_clear:
+            self._curr_word_label["text"] += char
+        else:
+            self._curr_word_label["text"] = ""
+
+    def good_choice(self, score, word):
+        self._score_label["text"] = score
+        self._found_words_list.insert(word)
