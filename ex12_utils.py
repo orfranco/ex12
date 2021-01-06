@@ -5,14 +5,22 @@ ROW_COORD_IND = 0
 COLUMN_COORD_IND = 1
 
 
-def load_words_dict(file_path):
+def load_words_dict(file_path: str):
+    """
+
+    :param file_path: the path to the file containing the words.
+    :return: a dictionary containing the words on the file as keys, and True
+    for all the values.
+    """
+    # TODO: think about test cases.
     words_dict = dict()
 
     with open(file_path, 'r') as words_file:
-        line = words_file.readline().replace("\n", "")
-        while line:
-            words_dict[line] = True
-            line = words_file.readline().replace("\n", "")
+        for line in words_file.readlines():
+            replaced_line = line.replace("\n", "")
+            if replaced_line:
+                words_dict[line.replace("\n", "")] = True
+
 
     return words_dict
 
