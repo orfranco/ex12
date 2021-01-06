@@ -39,7 +39,6 @@ def test_load_words_dict():
     assert load_words_dict("TESTS\load_dict_test_text.txt") == {"or": True, "o":
                             True, "m m": True, "ss": True, "    ab": True}
 
-
 def test_is_valid_path():
     assert is_valid_path(BOARD_1, nimrod, WORDS_1) == "nimrod"
     assert is_valid_path(BOARD_1, or_1, WORDS_1) == "or"

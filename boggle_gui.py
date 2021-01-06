@@ -44,6 +44,7 @@ class BoggleGui:
         self._progress_label = tk.Label(self._left_frame, **LEFT_LABEL_STYLE)
         self._buttons_frame = tk.Frame(self._left_frame)
         self._chars_buttons: Dict[tk.Button, Tuple[str, Tuple[int, int]]] = dict()
+        self._coords_buttons = dict()
         self._create_chars_grid(self._board)
 
     def _create_chars_grid(self, board):
@@ -66,6 +67,7 @@ class BoggleGui:
                     sticky=tk.NSEW)
 
         self._chars_buttons[button] = (button_char, (row, col))
+        self._coords_buttons[(row, col)] = button
 
         def _on_enter(event: Any) -> None:
             button['background'] = BUTTON_HOVER_COLOR
@@ -143,8 +145,11 @@ class BoggleGui:
             self._timer_label["text"] = ""
             self._found_words_list.delete(0, tk.END)
             self._main_window.after_cancel(self._timer_animator_id)
-
-
+            for row in range(len(new_board)):
+                for col in range(len(new_board)):
+                    self._chars_buttons[self._coords_buttons[(row,col)]] \
+                        = (new_board[row][col],(row, col))
+                    self._coords_buttons[(row, col)]["text"] = ""
 
     def _animate_timer(self):
         self._timer_label["text"] = self._timer.get_time()

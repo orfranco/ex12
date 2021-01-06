@@ -162,3 +162,4 @@ def _helper_find_length_n_words(n, board, words, curr_word,
                                     curr_path + [cell], valid_paths_list)
 
     return valid_paths_list
+
