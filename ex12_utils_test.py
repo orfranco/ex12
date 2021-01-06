@@ -32,6 +32,7 @@ all_chars_2 = [(0,0), (0,1), (0,2), (0,3), (1,3), (1,2), (1,1), (1,0), (2,0),
 invalid_1 = [(-1, 13), (25, 2), (0, 0)]
 invalid_2 = [(0, 0), (0, 1), (1, 1)]
 invalid_3 = [(0,0), (1,3)]
+invalid_dred = [(3,2), (2,3),(3,3), (3,2)]
 
 
 def test_load_words_dict():
@@ -55,6 +56,7 @@ def test_is_valid_path():
     assert is_valid_path(BOARD_1, invalid_1, WORDS_1) is None
     assert is_valid_path(BOARD_1, invalid_2, WORDS_1) is None
     assert is_valid_path(BOARD_1, invalid_3, WORDS_1) is None
+    assert is_valid_path(BOARD_1, invalid_dred, WORDS_1) is None
 
 
 def test_possible_cells():
