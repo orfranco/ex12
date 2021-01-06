@@ -20,10 +20,12 @@ class BoggleController:
         self.__logic = BoggleLogic(self.__words_dict, self.__board)
 
         for button, data in self.__gui.get_chars_buttons().items():
-            action = self._create_button_action(data[COORD_INDEX], button)
+            action = self._create_grid_button_action(data[COORD_INDEX], button)
             self.__gui.set_button_command(button, action)
 
-    def _create_button_action(self, coord, button):
+        clear_action = cre
+
+    def _create_grid_button_action(self, coord, button):
         def command():
             self.__logic.insert_coord_to_path(coord)
             self.__gui.update_curr_word_label(button)
