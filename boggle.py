@@ -23,7 +23,7 @@ class BoggleController:
             action = self._create_grid_button_action(data[COORD_INDEX], button)
             self.__gui.set_button_command(button, action)
 
-        clear_action = cre
+
 
     def _create_grid_button_action(self, coord, button):
         def command():
