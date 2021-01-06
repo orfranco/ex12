@@ -182,7 +182,7 @@ class Timer:
 
     def start_timer(self):
         self.__start_time = int(time.time())
-        self.__end_time = self.__start_time + 180
+        self.__end_time = self.__start_time + Timer.STARTING_TIME
 
     def _calculate_time(self) -> Optional[int]:
         """
@@ -192,7 +192,7 @@ class Timer:
         current_time = int(time.time())
         if current_time <= self.__end_time:
             return self.__end_time - current_time
-        return
+        return 0
 
     def get_time(self):
         """
@@ -201,10 +201,7 @@ class Timer:
         """
         current_time = self._calculate_time()
 
-        if current_time is not None:
-            return convert_to_minutes_format(current_time)
-
-        return
+        return convert_to_minutes_format(current_time)
 
 
 def convert_to_minutes_format(time_in_secs: int) -> str:
