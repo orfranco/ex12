@@ -2,7 +2,7 @@ from typing import List, Tuple, Dict, Optional
 
 # Constants:
 ROW_INDEX = 0
-COLUMN_INDEX = 1
+COL_INDEX = 1
 COORD_NEIGHBORS = [(-1, -1), (-1, 0), (-1, 1), (0, -1),
                    (0, 1), (1, -1), (1, 0), (1, 1)]
 MIN_WORD_LENGTH = 3
@@ -43,7 +43,7 @@ def is_valid_path(board: List[List[str]],
     word: str = ""
 
     for coord in path:
-        row_index, col_index = coord[ROW_INDEX], coord[COLUMN_INDEX]
+        row_index, col_index = coord[ROW_INDEX], coord[COL_INDEX]
         if coord_in_board(coord, board):
             word += board[row_index][col_index]
 
@@ -61,7 +61,7 @@ def coord_in_board(coord: Tuple[int, int], board: List[List[str]]) -> bool:
     :return:
     """
     board_size: int = len(board)  # Board should always be a square.
-    row_index, col_index = coord[ROW_INDEX], coord[COLUMN_INDEX]
+    row_index, col_index = coord[ROW_INDEX], coord[COL_INDEX]
 
     if 0 <= row_index < board_size and 0 <= col_index < board_size:
         return True
@@ -79,12 +79,12 @@ def possible_cells(path: List[Tuple[int,int]],
     """
     current_coord: Tuple[int, int] = path[-1]
     coord_row = current_coord[ROW_INDEX]
-    coord_col = current_coord[COLUMN_INDEX]
+    coord_col = current_coord[COL_INDEX]
 
     possible_neighbors: List[Tuple[int, int]] = []
     for neighbor in COORD_NEIGHBORS:
         neighbor = (neighbor[ROW_INDEX] + coord_row,
-                    neighbor[COLUMN_INDEX] + coord_col)
+                    neighbor[COL_INDEX] + coord_col)
 
         if coord_in_board(neighbor, board) and neighbor not in path:
             possible_neighbors.append(neighbor)
@@ -107,6 +107,7 @@ def find_length_n_words(n: int, board: List[List[str]], words: Dict):
 
     # start the helper function, from any coordinate in the board:
     if MIN_WORD_LENGTH <= n <= MAX_WORD_LENGTH:
+        # TODO: validate the board is a square.
         for row in range(len(board)):
             for col in range(len(board)):
                 all_valid_paths.extend(
@@ -147,8 +148,8 @@ def _helper_find_length_n_words(n, board, words, curr_word,
         return valid_paths_list
 
     for cell in possible_cells(curr_path, board):
-        _helper_find_length_n_words(n, board, words,
-                                    curr_word + board[cell[0]][cell[1]],
+        _helper_find_length_n_words(n, board, words, curr_word +
+                                    board[cell[ROW_INDEX]][cell[COL_INDEX]],
                                     curr_path + [cell], valid_paths_list)
 
     return valid_paths_list
