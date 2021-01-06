@@ -27,6 +27,9 @@ class BoggleLogic:
     def pop_coord_from_path(self):
         self.__curr_path.pop()
 
+    def clear_path(self):
+        self.__curr_path = []
+
     def check_path(self) -> Optional[str]:
         return utils.is_valid_path(self.__board,
                                    self.__curr_path,
