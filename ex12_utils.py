@@ -16,5 +16,3 @@ def is_valid_path(board, path, words):
 
 def find_length_n_words(n, board, words):
     pass
-
-print(load_words_dict("README"))
