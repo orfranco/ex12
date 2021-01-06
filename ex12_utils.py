@@ -137,9 +137,11 @@ def _helper_find_length_n_words(n, board, words, curr_word,
             length n.
     """
     # base case:
-    if len(curr_path) == n:
+    if len(curr_word) == n:
         if curr_word in words:
             valid_paths_list.append((curr_word, curr_path))
+        return valid_paths_list
+    if len(curr_word) > n:
         return valid_paths_list
 
     good_word = False

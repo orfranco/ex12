@@ -1,6 +1,8 @@
 import ex12_utils as utils
-from typing import Optional
 import time
+import tkinter as tk
+from typing import Optional, Any
+from boggle_board_randomizer import *
 
 STARTING_SCORE = 0
 
@@ -14,7 +16,7 @@ class BoggleLogic:
         self.__score = STARTING_SCORE
 
     def update_score(self, n):
-        self.__score += n**2
+        self.__score += n ** 2
 
     def get_score(self):
         return self.__score
@@ -31,8 +33,119 @@ class BoggleLogic:
                                    self.__words_dict)
 
 
+COURIER_30 = ("Courier", 30)
+
+BUTTON_HOVER_COLOR = 'tomato'
+REGULAR_COLOR = 'steel blue'
+BUTTON_ACTIVE_COLOR = 'gold'
+BUTTON_STYLE = {"font": ("Courier", 30),
+                "borderwidth": 1,
+                "relief": tk.RAISED,
+                "bg": REGULAR_COLOR,
+                "activebackground": BUTTON_ACTIVE_COLOR}
+START_RESTART_BUTTON_STYLE = {"font": ("Courier", 14),
+                              "borderwidth": 1,
+                              "relief": tk.RAISED,
+                              "bg": REGULAR_COLOR,
+                              "width": 7,
+                              "activebackground": BUTTON_ACTIVE_COLOR}
+LEFT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
+                    "width": 15, "height": 1, "relief": "ridge"}
+
+RIGHT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
+                     "width": 7, "relief": "ridge"}
+
 class BoggleGui:
-    pass
+    def __init__(self, board, timer):
+        self._board = board
+        self._timer = timer
+        self._main_window = tk.Tk()
+        self._main_window.title("Boggle")
+        self._main_window.resizable(False, False)
+        self._init_left_frame()
+        self._init_right_frame()
+        self._pack()
+
+    def _init_left_frame(self):
+        self._left_frame = tk.Frame(self._main_window, bg=REGULAR_COLOR)
+        self._curr_word_label = tk.Label(self._left_frame, **LEFT_LABEL_STYLE)
+        self._progress_label = tk.Label(self._left_frame, **LEFT_LABEL_STYLE)
+        self._buttons_frame = tk.Frame(self._left_frame)
+        self._grid_buttons = dict()
+        self._create_chars_grid(self._board)
+
+    def _init_right_frame(self):
+        self._right_frame = tk.Frame(self._main_window, bg=REGULAR_COLOR)
+        self._timer_label = tk.Label(self._right_frame,
+                                     **RIGHT_LABEL_STYLE, height=1
+                                     , text="03:00")
+        self._score_label = tk.Label(self._right_frame,
+                                     **RIGHT_LABEL_STYLE, height=1,
+                                     text="0")
+        self._create_start_restart_frame()
+        self._words_label = tk.Label(self._right_frame, **RIGHT_LABEL_STYLE,
+                                     height=6)
+
+    def _create_chars_grid(self, board):
+        for row in range(len(board)):
+            tk.Grid.columnconfigure(self._buttons_frame, row, weight=1)
+            tk.Grid.rowconfigure(self._buttons_frame, row, weight=1)
+
+        for row_index, row in enumerate(board):
+            for col_index, char in enumerate(row):
+                self._make_button_on_grid(char, row_index, col_index)
+
+    def _make_button_on_grid(self, button_char: str, row: int, col: int,
+                             rowspan: int = 1,
+                             columnspan: int = 1) -> tk.Button:
+
+        button = tk.Button(self._buttons_frame,
+                           text=button_char,
+                           **BUTTON_STYLE)
+        button.grid(row=row,
+                    column=col,
+                    rowspan=rowspan,
+                    columnspan=columnspan,
+                    sticky=tk.NSEW)
+
+        self._grid_buttons[button_char] = button
+
+        def _on_enter(event: Any) -> None:
+            button['background'] = BUTTON_HOVER_COLOR
+
+        def _on_leave(event: Any) -> None:
+            button['background'] = REGULAR_COLOR
+
+        button.bind("<Enter>", _on_enter)
+        button.bind("<Leave>", _on_leave)
+        return button
+
+    def _create_start_restart_frame(self):
+        self._start_restart_frame = tk.Frame(self._right_frame,
+                                             bg=REGULAR_COLOR)
+        self._start_button = tk.Button(self._start_restart_frame,
+                                       text="Start",
+                                       **START_RESTART_BUTTON_STYLE)
+        self._restart_button = tk.Button(self._start_restart_frame,
+                                         text="Restart",
+                                         **START_RESTART_BUTTON_STYLE)
+
+    def _pack(self):
+        self._left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self._curr_word_label.pack(side=tk.TOP, fill=tk.BOTH)
+        self._progress_label.pack(side=tk.TOP, fill=tk.BOTH)
+        self._buttons_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        self._right_frame.pack(fill=tk.BOTH, expand=True)
+        self._timer_label.pack(side=tk.TOP)
+        self._score_label.pack(side=tk.TOP)
+        self._start_restart_frame.pack(side=tk.TOP)
+        self._start_button.pack(side=tk.LEFT)
+        self._restart_button.pack(side=tk.LEFT)
+        self._words_label.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+    def run(self):
+        self._main_window.mainloop()
 
 
 class BoggleController:
@@ -92,3 +205,7 @@ def convert_to_minutes_format(time_in_secs: int) -> str:
 
     return f"{minutes}:{seconds}"
 
+
+
+boggle = BoggleGui(randomize_board(),Timer())
+boggle.run()
