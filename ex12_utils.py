@@ -61,10 +61,10 @@ def is_valid_path(board: List[List[str]],
 
 def coord_in_board(coord: Tuple[int, int], board: List[List[str]]) -> bool:
     """
-
-    :param coord:
-    :param board:
-    :return:
+    This function checks if the given coordinate is in the given board.
+    :param coord: A coordinate on the board.
+    :param board: The board. a 2 dimensional list.
+    :return: True if the coordinate is in the board, or False otherwise.
     """
     # TODO: Will the board always be a square?
     board_size: int = len(board)  # Board should always be a square.
@@ -79,10 +79,10 @@ def coord_in_board(coord: Tuple[int, int], board: List[List[str]]) -> bool:
 def possible_cells(path: List[Tuple[int,int]],
                    board: List[List[str]]) -> List[Tuple[int, int]]:
     """
-    TODO
-    :param path:
-    :param board:
-    :return:
+    This function finds all possible cells that can be added to the given path.
+    :param path: A path on the board - list of coordinates.
+    :param board: The board - a 2 dimensional list.
+    :return: A list of possible coordinates to continue the given path.
     """
     current_coord: Tuple[int, int] = path[-1]
     coord_row = current_coord[ROW_INDEX]
@@ -162,4 +162,3 @@ def _helper_find_length_n_words(n, board, words, curr_word,
                                     curr_path + [cell], valid_paths_list)
 
     return valid_paths_list
-
