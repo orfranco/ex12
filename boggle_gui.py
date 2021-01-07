@@ -20,7 +20,7 @@ START_CLEAR_BUTTON_STYLE = {"font": ("Courier", 14),
                             "width": 7,
                             "activebackground": BUTTON_ACTIVE_COLOR}
 LEFT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
-                    "width": 15, "height": 1, "relief": "ridge"}
+                    "width": 15, "height": 2, "relief": "ridge"}
 
 RIGHT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
                      "width": 7, "relief": "ridge"}
@@ -49,8 +49,6 @@ class BoggleGui:
                                     bg=REGULAR_COLOR)
         self._curr_word_label = tk.Label(self._left_frame,
                                          text="", **LEFT_LABEL_STYLE)
-        self._progress_label = tk.Label(self._left_frame,
-                                        **LEFT_LABEL_STYLE)
         self._buttons_frame = tk.Frame(self._left_frame)
 
         # Dictionaries with data on the grid of characters:
@@ -153,9 +151,8 @@ class BoggleGui:
         """
         # Pack left frame:
         self._left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        self._curr_word_label.pack(side=tk.TOP, fill=tk.BOTH)
-        self._progress_label.pack(side=tk.TOP, fill=tk.BOTH)
-        self._buttons_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self._curr_word_label.pack(side=tk.TOP)
+        self._buttons_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
         # Pack right frame:
         self._right_frame.pack(fill=tk.BOTH, expand=True)
