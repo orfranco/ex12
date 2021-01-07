@@ -283,12 +283,16 @@ class BoggleGui:
             self._main_window.destroy()
 
         popup.wm_title("Popup")
-        score_label = tk.Label(popup, text=self._score_label["text"], width=24)
+        score_label = tk.Label(popup,
+                               text=f"Your Score: {self._score_label['text']}",
+                                                                     width=24)
         question_label = tk.Label(popup, text="Do you want to play again?")
         score_label.pack(side='top', fill='x', pady=10)
         question_label.pack(side='top', fill='x', pady=10)
-        play_again_button = tk.Button(popup, text="Yes", command=play_again)
-        quit_button = tk.Button(popup, text="No", command=quit_cmd)
-        play_again_button.pack()
-        quit_button.pack()
+        buttons_frame = tk.Frame(popup)
+        play_again_button = tk.Button(buttons_frame, text="Yes", command=play_again)
+        quit_button = tk.Button(buttons_frame, text="No", command=quit_cmd)
+        buttons_frame.pack(side = "top")
+        play_again_button.pack(side = "left")
+        quit_button.pack(side = "right")
         popup.mainloop()

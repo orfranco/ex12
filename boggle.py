@@ -5,7 +5,7 @@ from boggle_logic import BoggleLogic, Timer
 
 
 WORDS_FILE = "boggle_dict.txt"
-GAME_DURATION = 10
+GAME_DURATION = 180
 CHAR_INDEX = 0
 COORD_INDEX = 1
 
