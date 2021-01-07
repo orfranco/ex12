@@ -14,16 +14,18 @@ BUTTON_STYLE = {"font": ("Courier", 30),
                 "activebackground": BUTTON_ACTIVE_COLOR}
 
 START_CLEAR_BUTTON_STYLE = {"font": ("Courier", 14),
-                              "borderwidth": 1,
-                              "relief": tk.RAISED,
-                              "bg": REGULAR_COLOR,
-                              "width": 7,
-                              "activebackground": BUTTON_ACTIVE_COLOR}
+                            "borderwidth": 1,
+                            "relief": tk.RAISED,
+                            "bg": REGULAR_COLOR,
+                            "width": 7,
+                            "activebackground": BUTTON_ACTIVE_COLOR}
 LEFT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
                     "width": 15, "height": 1, "relief": "ridge"}
 
 RIGHT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
                      "width": 7, "relief": "ridge"}
+CHAR_INDEX = 0
+COORD_INDEX = 1
 
 
 class BoggleGui:
@@ -38,36 +40,53 @@ class BoggleGui:
         self._pack()
 
     def _init_left_frame(self):
-        self._left_frame = tk.Frame(self._main_window, bg=REGULAR_COLOR)
+        """
+        TODO
+        :return:
+        """
+        self._left_frame = tk.Frame(self._main_window,
+                                    bg=REGULAR_COLOR)
         self._curr_word_label = tk.Label(self._left_frame,
                                          text="", **LEFT_LABEL_STYLE)
-        self._progress_label = tk.Label(self._left_frame, **LEFT_LABEL_STYLE)
+        self._progress_label = tk.Label(self._left_frame,
+                                        **LEFT_LABEL_STYLE)
         self._buttons_frame = tk.Frame(self._left_frame)
-        self._chars_buttons: Dict[tk.Button, Tuple[str, Tuple[int, int]]] = dict()
-        self._coords_buttons = dict()
-        self._create_chars_grid(self._board)
 
-    def _create_chars_grid(self, board):
-        for row in range(len(board)):
+        # Dictionaries with data on the grid of characters:
+        self._grid_buttons_to_data = dict()
+        self._coords_to_buttons = dict()
+
+        self._init_chars_grid()
+
+    def _init_chars_grid(self):
+        """
+        TODO
+        :return:
+        """
+        # Create a grid:
+        for row in range(len(self._board)):
             tk.Grid.columnconfigure(self._buttons_frame, row, weight=1)
             tk.Grid.rowconfigure(self._buttons_frame, row, weight=1)
 
-        for row_index, row in enumerate(board):
+        # Fill the grid with buttons:
+        for row_index, row in enumerate(self._board):
             for col_index, char in enumerate(row):
                 self._make_button_on_grid(char, row_index, col_index)
 
     def _make_button_on_grid(self, button_char: str,
                              row: int, col: int,) -> tk.Button:
+        """
+        TODO
+        :param button_char:
+        :param row:
+        :param col:
+        :return:
+        """
+        button = tk.Button(self._buttons_frame, text="", **BUTTON_STYLE)
+        button.grid(row=row, column=col, sticky=tk.NSEW)
 
-        button = tk.Button(self._buttons_frame,
-                           text="",
-                           **BUTTON_STYLE)
-        button.grid(row=row,
-                    column=col,
-                    sticky=tk.NSEW)
-
-        self._chars_buttons[button] = (button_char, (row, col))
-        self._coords_buttons[(row, col)] = button
+        self._grid_buttons_to_data[button] = (button_char, (row, col))
+        self._coords_to_buttons[(row, col)] = button
 
         def _on_enter(event: Any) -> None:
             button['background'] = BUTTON_HOVER_COLOR
@@ -77,21 +96,33 @@ class BoggleGui:
 
         button.bind("<Enter>", _on_enter)
         button.bind("<Leave>", _on_leave)
+
         return button
 
     def _init_right_frame(self):
-        self._right_frame = tk.Frame(self._main_window, bg=REGULAR_COLOR)
+        """
+        TODO
+        :return:
+        """
+        self._right_frame = tk.Frame(self._main_window,
+                                     bg=REGULAR_COLOR)
         self._timer_label = tk.Label(self._right_frame,
-                                     **RIGHT_LABEL_STYLE, height=1)
+                                     **RIGHT_LABEL_STYLE,
+                                     height=1)
         self._score_label = tk.Label(self._right_frame,
-                                     **RIGHT_LABEL_STYLE, height=1,
-                                     text="0")
+                                     **RIGHT_LABEL_STYLE,
+                                     height=1, text="0")
+
         self._create_start_clear_frame()
         self._create_scrollbar_frame()
         self._check_button = tk.Button(self._right_frame, text="Check!",
                                        **START_CLEAR_BUTTON_STYLE)
 
     def _create_start_clear_frame(self):
+        """
+        TODO
+        :return:
+        """
         self._start_clear_frame = tk.Frame(self._right_frame,
                                            bg=REGULAR_COLOR)
         self._clear_button = tk.Button(self._start_clear_frame,
@@ -103,19 +134,29 @@ class BoggleGui:
 
     def _create_scrollbar_frame(self):
         # TODO: leyafyef.
+        """
+        TODO
+        :return:
+        """
         self._scrollbar_frame = tk.Frame(self._right_frame, bg=REGULAR_COLOR)
         self._words_scrollbar = tk.Scrollbar(self._scrollbar_frame)
-        self._found_words_list = \
-            tk.Listbox(self._scrollbar_frame,
-                       yscrollcommand=self._words_scrollbar.set,
-                       width=26, height=11)
+        self._found_words_list = tk.Listbox(self._scrollbar_frame,
+                                            yscrollcommand=
+                                            self._words_scrollbar.set,
+                                            width=26, height=11)
 
     def _pack(self):
+        """
+        TODO
+        :return:
+        """
+        # Pack left frame:
         self._left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self._curr_word_label.pack(side=tk.TOP, fill=tk.BOTH)
         self._progress_label.pack(side=tk.TOP, fill=tk.BOTH)
         self._buttons_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
+        # Pack right frame:
         self._right_frame.pack(fill=tk.BOTH, expand=True)
         self._timer_label.pack(side=tk.TOP)
         self._score_label.pack(side=tk.TOP)
@@ -125,34 +166,63 @@ class BoggleGui:
         self._scrollbar_frame.pack(side=tk.TOP, fill=tk.Y)
         self._words_scrollbar.pack(side=tk.RIGHT, fill=tk.BOTH)
         self._found_words_list.pack(side=tk.LEFT)
-        self._check_button.pack(side=tk.TOP, fill=tk.BOTH,expand=True)
+        self._check_button.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
     def run(self):
         self._main_window.mainloop()
 
-    def start_game(self, new_board):
+    def start_stop_game(self, new_board):
+        """
+        TODO
+        :param new_board:
+        :return:
+        """
+        # Start the game:
         if self._start_button["text"] == "Start":
             self._start_button["text"] = "Stop"
-            for button, button_data in self._chars_buttons.items():
-                button["text"] = button_data[0]
+
+            for button, button_data in self._grid_buttons_to_data.items():
+                button["text"] = button_data[CHAR_INDEX]
             self._timer.start_timer()
             self._animate_timer()
+
         else:
-            self._start_button["text"] = "Start"
-            self._board = new_board
-            self._curr_word_label["text"] = ""
-            self._score_label["text"] = "0"
-            self._timer_label["text"] = ""
-            self._found_words_list.delete(0, tk.END)
-            self._main_window.after_cancel(self._timer_animator_id)
-            for row in range(len(new_board)):
-                for col in range(len(new_board)):
-                    self._chars_buttons[self._coords_buttons[(row,col)]] \
-                        = (new_board[row][col],(row, col))
-                    self._coords_buttons[(row, col)]["text"] = ""
+            self._stop_game(new_board)
+
+    def _stop_game(self, new_board):
+        """
+        TODO
+        :param new_board:
+        :return:
+        """
+        self._start_button["text"] = "Start"
+        self._board = new_board
+
+        # Clear GUI:
+        self._curr_word_label["text"] = ""
+        self._score_label["text"] = "0"
+        self._timer_label["text"] = ""
+        self._found_words_list.delete(0, tk.END)
+
+        # Stop the timer animation:
+        self._main_window.after_cancel(self._timer_animator_id)
+
+        # Reload characters to the grid:
+        for row in range(len(new_board)):
+            for col in range(len(new_board)):
+                button = self._coords_to_buttons[(row, col)]
+                coord = (row, col)
+                new_char = new_board[row][col]
+                self._grid_buttons_to_data[button] = (new_char, coord)
+                self._coords_to_buttons[coord]["text"] = ""
 
     def _animate_timer(self):
+        """
+        TODO
+        :return:
+        """
         self._timer_label["text"] = self._timer.get_time()
+
         if self._timer_label["text"] != "0:00":
             self._timer_animator_id = \
                 self._main_window.after(100, self._animate_timer)
@@ -162,7 +232,7 @@ class BoggleGui:
         TODO
         :return:
         """
-        return self._chars_buttons
+        return self._grid_buttons_to_data
 
     def set_grid_button_command(self, button, action):
         button["command"] = action
@@ -183,5 +253,11 @@ class BoggleGui:
             self._curr_word_label["text"] = ""
 
     def good_choice(self, score, word):
+        """
+        TODO
+        :param score:
+        :param word:
+        :return:
+        """
         self._score_label["text"] = score
         self._found_words_list.insert(tk.END, word)

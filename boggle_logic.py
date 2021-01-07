@@ -11,49 +11,80 @@ class BoggleLogic:
         self.__board = board
         self.__curr_path = []
         self._found_word = set()
-        self.__curr_word_length = 0
         self.__score = STARTING_SCORE
         self._game_started = False
 
     def update_score(self, n):
+        """
+        TODO
+        :param n:
+        :return:
+        """
         self.__score += n ** 2
 
     def get_score(self):
+        """
+        TODO
+        :return:
+        """
         return self.__score
 
     def insert_coord_to_path(self, coord):
+        """
+        TODO
+        :param coord:
+        :return:
+        """
         self.__curr_path.append(coord)
-        self.__curr_word_length += len(self.__board[coord[0]][coord[1]])
 
     def pop_coord_from_path(self, coord):
+        """
+        TODO
+        :param coord:
+        :return:
+        """
         self.__curr_path.pop()
-        self.__curr_word_length -= len(self.__board[coord[0]][coord[1]])
 
     def clear_path(self):
+        """
+        TODO
+        :return:
+        """
         self.__curr_path = []
-        self.__curr_word_length = 0
 
-    def check_path(self) -> Optional[str]:
+    def submit_word(self) -> Optional[str]:
+        """
+        TODO
+        :return:
+        """
         word = utils.is_valid_path(self.__board,
                                    self.__curr_path,
                                    self.__words_dict)
+        self.clear_path()
+
         if word and word not in self._found_word:
-            self.update_score(self.__curr_word_length)
+            self.update_score(len(word))
             self._found_word.add(word)
             return word
+
         return
 
-    def get_curr_word_len(self):
-        return self.__curr_word_length
-
     def get_path(self):
+        """
+        TODO
+        :return:
+        """
         return self.__curr_path
 
     def start_game(self, new_board):
+        """
+        TODO
+        :param new_board:
+        :return:
+        """
         if self._game_started:
             self.__curr_path = []
             self._found_word = set()
-            self.__curr_word_length = 0
             self.__score = STARTING_SCORE
             self.__board = new_board
             self._game_started = False
@@ -65,16 +96,19 @@ class Timer:
     """
     This is a class of timers.
     """
-    STARTING_TIME: int = 180  # Seconds
 
-    def __init__(self):
+    def __init__(self, duration):
         self.__start_time = 0
         self.__end_time = 0
-        self.__current_time = Timer.STARTING_TIME
+        self.__duration = duration
 
     def start_timer(self):
+        """
+        TODO
+        :return:
+        """
         self.__start_time = int(time.time())
-        self.__end_time = self.__start_time + Timer.STARTING_TIME
+        self.__end_time = self.__start_time + self.__duration
 
     def _calculate_time(self) -> Optional[int]:
         """
