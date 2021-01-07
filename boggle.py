@@ -5,7 +5,7 @@ from boggle_logic import BoggleLogic, Timer
 
 
 WORDS_FILE = "boggle_dict.txt"
-GAME_DURATION = 180
+GAME_DURATION = 10
 CHAR_INDEX = 0
 COORD_INDEX = 1
 
@@ -79,9 +79,11 @@ class BoggleController:
         """
         def command():
             word = self.__logic.submit_word()
+
             if word:
                 self.__gui.good_choice(self.__logic.get_score(), word)
             self.__gui.update_curr_word_label("", True)
+
         return command
 
     def run(self):

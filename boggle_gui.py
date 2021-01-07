@@ -182,6 +182,7 @@ class BoggleGui:
         if self._start_button["text"] == "Start":
             self._start_button["text"] = "Stop"
             self._found_words_list.delete(0, tk.END)
+            self._score_label["text"] = "0"
 
             for button, button_data in self._grid_buttons_to_data.items():
                 button["text"] = button_data[CHAR_INDEX]
@@ -200,9 +201,8 @@ class BoggleGui:
         self._start_button["text"] = "Start"
         self._board = new_board
 
-        # Clear GUI:
+        # Clear labels:
         self._curr_word_label["text"] = ""
-        self._score_label["text"] = "0"
         self._timer_label["text"] = ""
 
         # Stop the timer animation:
@@ -216,6 +216,7 @@ class BoggleGui:
                 new_char = new_board[row][col]
                 self._grid_buttons_to_data[button] = (new_char, coord)
                 self._coords_to_buttons[coord]["text"] = ""
+        self._popup(new_board)
 
     def _animate_timer(self, timer_action):
         """
@@ -270,3 +271,27 @@ class BoggleGui:
         """
         self._score_label["text"] = score
         self._found_words_list.insert(tk.END, word)
+
+    def _popup(self, new_board):
+        popup = tk.Toplevel(self._main_window)
+        popup.transient(self._main_window)
+        popup.grab_set()
+
+        def play_again():
+            self.start_stop_game(new_board)
+            popup.destroy()
+
+        def quit_cmd():
+            popup.destroy()
+            self._main_window.destroy()
+
+        popup.wm_title("Popup")
+        score_label = tk.Label(popup, text=self._score_label["text"], width=24)
+        question_label = tk.Label(popup, text="Do you want to play again?")
+        score_label.pack(side='top', fill='x', pady=10)
+        question_label.pack(side='top', fill='x', pady=10)
+        play_again_button = tk.Button(popup, text="Yes", command=play_again)
+        quit_button = tk.Button(popup, text="No", command=quit_cmd)
+        play_again_button.pack()
+        quit_button.pack()
+        popup.mainloop()
