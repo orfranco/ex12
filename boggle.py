@@ -33,6 +33,9 @@ class BoggleController:
         check_action = self._create_check_button_action()
         self.__gui.set_check_command(check_action)
 
+        timer_action = start_stop_action
+        self.__gui.set_end_timer_action_command(timer_action)
+
     def _create_start_stop_button_action(self):
         """
         TODO

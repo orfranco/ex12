@@ -32,6 +32,7 @@ class BoggleGui:
     def __init__(self, board, timer):
         self._board = board
         self._timer = timer
+        self._end_timer_action = None
         self._main_window = tk.Tk()
         self._main_window.title("Boggle")
         self._main_window.resizable(False, False)
@@ -180,11 +181,12 @@ class BoggleGui:
         # Start the game:
         if self._start_button["text"] == "Start":
             self._start_button["text"] = "Stop"
+            self._found_words_list.delete(0, tk.END)
 
             for button, button_data in self._grid_buttons_to_data.items():
                 button["text"] = button_data[CHAR_INDEX]
             self._timer.start_timer()
-            self._animate_timer()
+            self._animate_timer(self._end_timer_action)
 
         else:
             self._stop_game(new_board)
@@ -202,7 +204,6 @@ class BoggleGui:
         self._curr_word_label["text"] = ""
         self._score_label["text"] = "0"
         self._timer_label["text"] = ""
-        self._found_words_list.delete(0, tk.END)
 
         # Stop the timer animation:
         self._main_window.after_cancel(self._timer_animator_id)
@@ -216,7 +217,7 @@ class BoggleGui:
                 self._grid_buttons_to_data[button] = (new_char, coord)
                 self._coords_to_buttons[coord]["text"] = ""
 
-    def _animate_timer(self):
+    def _animate_timer(self, timer_action):
         """
         TODO
         :return:
@@ -225,7 +226,12 @@ class BoggleGui:
 
         if self._timer_label["text"] != "0:00":
             self._timer_animator_id = \
-                self._main_window.after(100, self._animate_timer)
+                self._main_window.after(100, self._animate_timer, timer_action)
+        else:
+            timer_action()
+
+    def get_timer_label(self):
+        return self._timer_label
 
     def get_chars_buttons(self) -> Dict[tk.Button, Tuple[str, Tuple[int, int]]]:
         """
@@ -245,6 +251,9 @@ class BoggleGui:
 
     def set_start_stop_command(self, action):
         self._start_button["command"] = action
+
+    def set_end_timer_action_command(self, action):
+        self._end_timer_action = action
 
     def update_curr_word_label(self, char, is_clear=False):
         if not is_clear:
