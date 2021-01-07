@@ -76,7 +76,7 @@ def coord_in_board(coord: Tuple[int, int], board: List[List[str]]) -> bool:
     return False
 
 
-def possible_cells(path: List[Tuple[int,int]],
+def possible_cells(path: List[Tuple[int, int]],
                    board: List[List[str]]) -> List[Tuple[int, int]]:
     """
     This function finds all possible cells that can be added to the given path.
