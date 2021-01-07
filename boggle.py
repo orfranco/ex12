@@ -43,8 +43,8 @@ class BoggleController:
         """
         def command():
             self.__board = randomize_board()
-            self.__gui.start_stop_game(self.__board)
             self.__logic.start_game(self.__board)
+            self.__gui.start_stop_game(self.__board)
 
         return command
 
@@ -79,7 +79,6 @@ class BoggleController:
         """
         def command():
             word = self.__logic.submit_word()
-
             if word:
                 self.__gui.good_choice(self.__logic.get_score(), word)
             self.__gui.update_curr_word_label("", True)

@@ -177,6 +177,7 @@ class BoggleGui:
         """
         # Start the game:
         if self._start_button["text"] == "Start":
+            print("start_gui")
             self._start_button["text"] = "Stop"
             self._found_words_list.delete(0, tk.END)
             self._score_label["text"] = "0"
@@ -184,7 +185,7 @@ class BoggleGui:
             for button, button_data in self._grid_buttons_to_data.items():
                 button["text"] = button_data[CHAR_INDEX]
             self._timer.start_timer()
-            self._animate_timer(self._end_timer_action)
+            self._animate_timer()
 
         else:
             self._stop_game(new_board)
@@ -215,7 +216,7 @@ class BoggleGui:
                 self._coords_to_buttons[coord]["text"] = ""
         self._popup(new_board)
 
-    def _animate_timer(self, timer_action):
+    def _animate_timer(self):
         """
         TODO
         :return:
@@ -224,9 +225,9 @@ class BoggleGui:
 
         if self._timer_label["text"] != "0:00":
             self._timer_animator_id = \
-                self._main_window.after(100, self._animate_timer, timer_action)
+                self._main_window.after(100, self._animate_timer)
         else:
-            timer_action()
+            self._end_timer_action()
 
     def get_timer_label(self):
         return self._timer_label
@@ -275,7 +276,7 @@ class BoggleGui:
         popup.grab_set()
 
         def play_again():
-            self.start_stop_game(new_board)
+            self._end_timer_action()
             popup.destroy()
 
         def quit_cmd():

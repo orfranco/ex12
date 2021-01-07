@@ -77,7 +77,6 @@ class BoggleLogic:
                                    self.__curr_path,
                                    self.__words_dict)
         self.clear_path()
-
         if word and word not in self._found_words:
             self.update_score(len(word))
             self._found_words.add(word)
@@ -99,6 +98,7 @@ class BoggleLogic:
         :return:
         """
         # Restart all attributes:
+
         if self._game_started:
             self.__curr_path = []
             self._found_words = set()
@@ -107,6 +107,7 @@ class BoggleLogic:
             self._game_started = False
             # self._all_possible_words = self._find_all_words()
         else:
+            print("start_logic")
             self._game_started = True
 
     # def all_words_found(self) -> bool:
