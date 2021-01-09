@@ -343,13 +343,18 @@ class BoggleGui:
         """
         self._clear_button["command"] = action
 
-    def set_check_command(self, action: Callable):
+    def set_check_command(self, button_action: Callable,
+                          keyboard_action: Callable):
         """
-        This method binds the given action (a function) to the check button.
-        :param action: The function that will run when the player presses the
-                       check button.
+        This method binds the given actions (functions) to the check button,
+        and to the Enter and Space keys of the keyboard.
+        :param button_action: The function that will run when the player clicks
+                            the check button.
+        :param keyboard_action: The function that will run when the player
+                                presses Enter or Space on the keyboard.
         """
-        self._check_button["command"] = action
+        self._check_button["command"] = button_action
+        self._main_window.bind("<Key>", keyboard_action)
 
     def set_start_stop_command(self, action: Callable):
         """

@@ -17,6 +17,8 @@ WORDS_FILE = "boggle_dict.txt"
 GAME_DURATION = 180
 CHAR_INDEX = 0
 COORD_INDEX = 1
+BUTTON_CMD_IDX = 0
+KEYBOARD_CMD_IDX = 1
 
 
 class BoggleController:
@@ -50,9 +52,11 @@ class BoggleController:
         # Create a function for the clear button of the GUI, and set it:
         clear_action = self._create_clear_button_action()
         self.__gui.set_clear_command(clear_action)
+
         # Create a function for the check button of the GUI, and set it:
-        check_action = self._create_check_button_action()
-        self.__gui.set_check_command(check_action)
+        check_action_1 = self._create_check_actions()[BUTTON_CMD_IDX]
+        check_action_2 = self._create_check_actions()[KEYBOARD_CMD_IDX]
+        self.__gui.set_check_command(check_action_1, check_action_2)
 
         # Set the start/stop command to run when the time is over:
         timer_action = start_stop_action
@@ -70,7 +74,7 @@ class BoggleController:
 
         return command
 
-    def _create_grid_button_action(self, coord: Tuple[int,int], button: Any) \
+    def _create_grid_button_action(self, coord: Tuple[int, int], button: Any) \
             -> Callable:
         """
         this function creates and returns a function that calls the updating
@@ -95,19 +99,28 @@ class BoggleController:
             self.__gui.update_curr_word_label("", True)
         return command
 
-    def _create_check_button_action(self) -> Callable:
+    def _create_check_actions(self) -> Tuple[Callable, Callable]:
         """
         this function creates and returns a function that calls the submit
         current word functions from the logic and gui classes.
-        :return:
+        :return: 2 functions:
+        One that will be connected to the check button of the GUI,
+        Second that binds the space and enter keys to the same operation.
         """
-        def command():
+        def button_command():
             word = self.__logic.submit_word()
             if word:
                 self.__gui.good_choice(self.__logic.get_score(), word)
             self.__gui.update_curr_word_label("", True)
 
-        return command
+        def keyboard_command(key):
+            if key.keysym == 'Return' or key.keysym == 'space':
+                word = self.__logic.submit_word()
+                if word:
+                    self.__gui.good_choice(self.__logic.get_score(), word)
+                self.__gui.update_curr_word_label("", True)
+
+        return button_command, keyboard_command
 
     def run(self):
         """
