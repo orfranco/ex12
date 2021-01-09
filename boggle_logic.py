@@ -107,7 +107,6 @@ class BoggleLogic:
             self._game_started = False
             # self._all_possible_words = self._find_all_words()
         else:
-            print("start_logic")
             self._game_started = True
 
     # def all_words_found(self) -> bool:

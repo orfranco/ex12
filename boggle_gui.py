@@ -1,16 +1,16 @@
 import tkinter as tk
 from typing import Optional, Any, Dict, Tuple
 
-
 COURIER_30 = ("Courier", 30)
-CALIBRI_11 = ("Calibri", "11",)
+CALIBRI_11 = ("Calibri", 11)
 
 BUTTON_HOVER_COLOR = 'sky blue'
-REGULAR_COLOR = 'azure'
+REGULAR_COLOR = 'light steel blue'
 BUTTON_ACTIVE_COLOR = 'dark turquoise'
 BUTTON_STYLE = {"font": ("Courier", 30),
                 "borderwidth": 1,
-                "relief": tk.RAISED,
+                "highlightthickness": 1,
+                "relief": "solid",
                 "bg": REGULAR_COLOR,
                 "activebackground": BUTTON_ACTIVE_COLOR}
 
@@ -69,8 +69,9 @@ class BoggleGui:
         """
         self._left_frame = tk.Frame(self._main_window,
                                     bg=REGULAR_COLOR)
+
         self._curr_word_label = tk.Label(self._left_frame,
-                                         text="", **LEFT_LABEL_STYLE)
+                                         text="",**LEFT_LABEL_STYLE)
         self._buttons_frame = tk.Frame(self._left_frame)
 
         # Dictionaries with data on the grid of characters:
@@ -93,6 +94,7 @@ class BoggleGui:
         for row_index, row in enumerate(self._board):
             for col_index, char in enumerate(row):
                 self._make_button_on_grid(char, row_index, col_index)
+
 
     def _make_button_on_grid(self, button_char: str,
                              row: int, col: int,) -> tk.Button:
@@ -173,7 +175,7 @@ class BoggleGui:
         """
         # Pack left frame:
         self._left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        self._curr_word_label.pack(side=tk.TOP)
+        self._curr_word_label.pack(side=tk.TOP, fill=tk.BOTH,expand=True)
         self._buttons_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
         # Pack right frame:
@@ -199,7 +201,6 @@ class BoggleGui:
         """
         # Start the game:
         if self._start_button["text"] == "Start":
-            print("start_gui")
             self._start_button["text"] = "Stop"
             self._found_words_list.delete(0, tk.END)
             self._score_label["text"] = "0"
