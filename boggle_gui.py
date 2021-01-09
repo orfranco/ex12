@@ -11,9 +11,10 @@ REGULAR_COLOR = 'LightSteelBlue3'
 BUTTON_ACTIVE_COLOR = 'dark turquoise'
 BUTTON_STYLE = {"font": ("Courier", 30),
                 "borderwidth": 1,
-                "highlightthickness": 1,
                 "relief": "groove",
                 "bg": REGULAR_COLOR,
+                "width": 1,
+                "height": 1,
                 "activebackground": BUTTON_ACTIVE_COLOR}
 START_CLEAR_BUTTON_STYLE = {"font": ("Courier", 14),
                             "borderwidth": 1,
@@ -31,7 +32,7 @@ CHECK_BUTTON_STYLE = {"font": ("Courier", 14),
                             "activebackground": BUTTON_ACTIVE_COLOR}
 
 LEFT_LABEL_STYLE = {"font": COURIER_27, "bg": REGULAR_COLOR,
-                    "width": 20, "height": 2, "relief": "groove"}
+                    "width": 16, "height": 2, "relief": "groove"}
 
 RIGHT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
                      "width": 7, "relief": "flat"}
