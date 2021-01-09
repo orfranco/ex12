@@ -5,26 +5,34 @@ COURIER_30 = ("Courier", 30)
 CALIBRI_11 = ("Calibri", 11)
 
 BUTTON_HOVER_COLOR = 'sky blue'
-REGULAR_COLOR = 'light steel blue'
+REGULAR_COLOR = 'LightSteelBlue3'
 BUTTON_ACTIVE_COLOR = 'dark turquoise'
 BUTTON_STYLE = {"font": ("Courier", 30),
                 "borderwidth": 1,
                 "highlightthickness": 1,
-                "relief": "solid",
+                "relief": "groove",
                 "bg": REGULAR_COLOR,
                 "activebackground": BUTTON_ACTIVE_COLOR}
 
 START_CLEAR_BUTTON_STYLE = {"font": ("Courier", 14),
                             "borderwidth": 1,
-                            "relief": tk.RAISED,
+                            "relief": "raised",
                             "bg": REGULAR_COLOR,
                             "width": 7,
                             "activebackground": BUTTON_ACTIVE_COLOR}
+CHECK_BUTTON_STYLE = {"font": ("Courier", 14),
+                            "borderwidth": 1,
+                            "relief": "solid",
+                            "bg": "DodgerBlue3",
+                            "width": 15,
+                            "height": 2,
+                            "pady": 6,
+                            "activebackground": BUTTON_ACTIVE_COLOR}
 LEFT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
-                    "width": 15, "height": 2, "relief": "ridge"}
+                    "width": 15, "height": 2, "relief": "groove"}
 
 RIGHT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
-                     "width": 7, "relief": "ridge"}
+                     "width": 7, "relief": "flat"}
 
 LISTBOX_STYLE = {'bg': 'azure',
                  'selectbackground': 'azure',
@@ -110,7 +118,7 @@ class BoggleGui:
         :param col:
         :return:
         """
-        button = tk.Button(self._buttons_frame, text="", **BUTTON_STYLE)
+        button = tk.Button(self._buttons_frame, text="",**BUTTON_STYLE)
         button.grid(row=row, column=col, sticky=tk.NSEW)
 
         self._grid_buttons_to_data[button] = (button_char, (row, col))
@@ -139,12 +147,12 @@ class BoggleGui:
                                      height=1)
         self._score_label = tk.Label(self._right_frame,
                                      **RIGHT_LABEL_STYLE,
-                                     height=1, text="0")
+                                     height=1, text="")
 
         self._create_start_clear_frame()
         self._create_words_list_frame()
         self._check_button = tk.Button(self._right_frame, text="Check!",
-                                       **START_CLEAR_BUTTON_STYLE)
+                                       **CHECK_BUTTON_STYLE)
 
     def _create_start_clear_frame(self):
         """
@@ -192,7 +200,7 @@ class BoggleGui:
         self._scrollbar_frame.pack(side=tk.TOP, fill=tk.Y)
         self._words_scrollbar.pack(side=tk.RIGHT, fill=tk.BOTH)
         self._found_words_list.pack(side=tk.LEFT)
-        self._check_button.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self._check_button.pack(side=tk.TOP)
 
     def run(self):
         self._main_window.mainloop()
@@ -228,7 +236,6 @@ class BoggleGui:
 
         # Clear labels:
         self._curr_word_label["text"] = ""
-        self._timer_label["text"] = ""
 
         # Stop the timer animation:
         self._main_window.after_cancel(self._timer_animator_id)
