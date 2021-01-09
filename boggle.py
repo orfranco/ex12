@@ -2,7 +2,7 @@
 # FILE: boggle.py
 # WRITERS:
 #         Nimrod Bar Giora , nimrodnm , 207090622
-#         Or Franco, or.franco, TODO: add id
+#         Or Franco, or.franco, 209498666
 # EXERCISE: intro2cs1 ex12 2021
 # DESCRIPTION: A Module that runs Boggle games.
 ##############################################################################
@@ -10,6 +10,7 @@ import ex12_utils as utils
 from boggle_board_randomizer import *
 from boggle_gui import BoggleGui
 from boggle_logic import BoggleLogic, Timer
+from typing import Any, Tuple, Callable
 
 # Constants:
 WORDS_FILE = "boggle_dict.txt"
@@ -57,10 +58,10 @@ class BoggleController:
         timer_action = start_stop_action
         self.__gui.set_end_timer_action_command(timer_action)
 
-    def _create_start_stop_button_action(self):
+    def _create_start_stop_button_action(self) -> Callable:
         """
-        TODO
-        :return:
+        this function creates and returns a function that calls the start_stop
+        game functions on the logic and gui classes.
         """
         def command():
             self.__board = randomize_board()
@@ -69,12 +70,13 @@ class BoggleController:
 
         return command
 
-    def _create_grid_button_action(self, coord, button):
+    def _create_grid_button_action(self, coord: Tuple[int,int], button: Any) \
+            -> Callable:
         """
-        TODO
-        :param coord:
-        :param button:
-        :return:
+        this function creates and returns a function that calls the updating
+        current word functions from the logic and gui classes.
+        :param coord: the coord thats been clicked.
+        :param button: the button thats been clicked.
         """
         def command():
             if button["text"]:
@@ -83,19 +85,20 @@ class BoggleController:
 
         return command
 
-    def _create_clear_button_action(self):
+    def _create_clear_button_action(self) -> Callable:
         """
-        TODO
-        :return:
+        this function creates and returns a function that calls the clear
+        current word functions from the logic and gui classes.
         """
         def command():
             self.__logic.clear_path()
             self.__gui.update_curr_word_label("", True)
         return command
 
-    def _create_check_button_action(self):
+    def _create_check_button_action(self) -> Callable:
         """
-        TODO
+        this function creates and returns a function that calls the submit
+        current word functions from the logic and gui classes.
         :return:
         """
         def command():
@@ -108,8 +111,8 @@ class BoggleController:
 
     def run(self):
         """
-        TODO
-        :return:
+        This function starts the mainloop of the gui.
+
         """
         self.__gui.run()
 

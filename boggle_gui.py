@@ -2,7 +2,7 @@
 # FILE: boggle_gui.py
 # WRITERS:
 #         Nimrod Bar Giora , nimrodnm , 207090622
-#         Or Franco, or.franco, TODO: add id
+#         Or Franco, or.franco, 209498666
 # EXERCISE: intro2cs1 ex12 2021
 # DESCRIPTION: A GUI class for a Boggle game.
 ##############################################################################
