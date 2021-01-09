@@ -28,8 +28,8 @@ BUTTON_STYLE = {"font": ("Courier", 30),
                 "activebackground": BUTTON_ACTIVE_COLOR}
 START_CLEAR_BUTTON_STYLE = {"font": ("Courier", 14),
                             "borderwidth": 1,
-                            "relief": "groove",
-                            "bg": REGULAR_COLOR,
+                            "relief": "raised",
+                            "bg": "DeepSkyBlue4",
                             "padx": 3,
                             "width": 7,
                             "activebackground": BUTTON_ACTIVE_COLOR}
