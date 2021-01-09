@@ -53,7 +53,7 @@ def is_valid_path(board: List[List[str]],
         elif coord in possible_cells(path[:index_in_path], board):
             word += board[row_index][col_index]
 
-    if len(word) == len(path) and word in words:
+    if len(word) >= len(path) and word in words:
         return word
 
     return

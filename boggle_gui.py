@@ -2,8 +2,10 @@ import tkinter as tk
 from typing import Optional, Any, Dict, Tuple
 
 # Styles:
+COURIER_27 = ("Courier", 27)
 COURIER_30 = ("Courier", 30)
 CALIBRI_11 = ("Calibri", 11)
+
 BUTTON_HOVER_COLOR = 'sky blue'
 REGULAR_COLOR = 'LightSteelBlue3'
 BUTTON_ACTIVE_COLOR = 'dark turquoise'
@@ -15,20 +17,22 @@ BUTTON_STYLE = {"font": ("Courier", 30),
                 "activebackground": BUTTON_ACTIVE_COLOR}
 START_CLEAR_BUTTON_STYLE = {"font": ("Courier", 14),
                             "borderwidth": 1,
-                            "relief": "raised",
+                            "relief": "groove",
                             "bg": REGULAR_COLOR,
+                            "padx": 3,
                             "width": 7,
                             "activebackground": BUTTON_ACTIVE_COLOR}
 CHECK_BUTTON_STYLE = {"font": ("Courier", 14),
                             "borderwidth": 1,
-                            "relief": "solid",
+                            "relief": "raised",
                             "bg": "DodgerBlue3",
                             "width": 15,
                             "height": 2,
-                            "pady": 6,
                             "activebackground": BUTTON_ACTIVE_COLOR}
-LEFT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
-                    "width": 15, "height": 2, "relief": "groove"}
+
+LEFT_LABEL_STYLE = {"font": COURIER_27, "bg": REGULAR_COLOR,
+                    "width": 20, "height": 2, "relief": "groove"}
+
 RIGHT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
                      "width": 7, "relief": "flat"}
 LISTBOX_STYLE = {'bg': 'azure',
@@ -204,7 +208,7 @@ class BoggleGui:
         self._scrollbar_frame.pack(side=tk.TOP, fill=tk.Y)
         self._words_scrollbar.pack(side=tk.RIGHT, fill=tk.BOTH)
         self._found_words_list.pack(side=tk.LEFT)
-        self._check_button.pack(side=tk.TOP)
+        self._check_button.pack(side=tk.TOP, ipady=9)
 
     def run(self):
         self._main_window.mainloop()
