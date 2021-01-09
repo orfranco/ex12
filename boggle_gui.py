@@ -1,5 +1,5 @@
 import tkinter as tk
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, Tuple, List
 
 # Fonts
 COURIER_27 = ("Courier", 27)
@@ -55,22 +55,31 @@ COORD_INDEX = 1
 
 
 class BoggleGui:
-    def __init__(self, board, timer):
+    """
+    TODO:
+    """
+    def __init__(self, board: List[List[str]], timer: Any):
+        """
+        the constructor of the Boggle Gui.
+        :param board: the board that will be played on the first game.
+        :param timer: the timer object.
+        """
         self._board = board
         self._timer = timer
-        self._end_timer_action = None
+
         self._main_window = tk.Tk()
         self._main_window.title("Boggle")
         self._main_window.resizable(False, False)
+
         self._init_left_frame()
         self._init_right_frame()
+
         self._pack()
         self._center_main_window()
 
     def _center_main_window(self):
         """
-        TODO
-        :return:
+        this function centres the main window.
         """
         self._main_window.update_idletasks()
         # Get main window and screen dimensions:
@@ -88,14 +97,12 @@ class BoggleGui:
 
     def _init_left_frame(self):
         """
-        TODO
-        :return:
+        this function inits the left frame and the widgets it contains.
         """
         self._left_frame = tk.Frame(self._main_window,
                                     bg=REGULAR_COLOR)
 
-        self._curr_word_label = tk.Label(self._left_frame,
-                                         text="",**LEFT_LABEL_STYLE)
+        self._curr_word_label = tk.Label(self._left_frame, **LEFT_LABEL_STYLE)
         self._buttons_frame = tk.Frame(self._left_frame)
 
         # Dictionaries with data on the grid of characters:
@@ -106,8 +113,7 @@ class BoggleGui:
 
     def _init_chars_grid(self):
         """
-        TODO
-        :return:
+        this function inits the grid of buttons containing the chars.
         """
         # Create a grid:
         for row in range(len(self._board)):
@@ -122,15 +128,19 @@ class BoggleGui:
     def _make_button_on_grid(self, button_char: str,
                              row: int, col: int,) -> tk.Button:
         """
-        TODO
-        :param button_char:
-        :param row:
-        :param col:
-        :return:
+        this function creates a button and places it on the grid. and inserts
+        the button and its data to the buttons dictionaries.
+        :param button_char: the char that the button will contain.
+        :param row: the row on the grid the button needed to be placed in.
+        :param col: the col on the grid the button needed to be placed in.
+        :return: a button widget that is placed on the grid, and contains the
+                char that was given.
         """
+        # creates the button widget and places it on the grid:
         button = tk.Button(self._buttons_frame, text="", **BUTTON_STYLE)
         button.grid(row=row, column=col, sticky=tk.NSEW)
 
+        # adds the button and its data to the buttons dictionaries:
         self._grid_buttons_to_data[button] = (button_char, (row, col))
         self._coords_to_buttons[(row, col)] = button
 
@@ -140,6 +150,7 @@ class BoggleGui:
         def _on_leave(event: Any) -> None:
             button['background'] = REGULAR_COLOR
 
+        # binding the events to the functions:
         button.bind("<Enter>", _on_enter)
         button.bind("<Leave>", _on_leave)
 
@@ -147,11 +158,11 @@ class BoggleGui:
 
     def _init_right_frame(self):
         """
-        TODO
-        :return:
+        this function inits the right frame and the widgets it contains.
         """
         self._right_frame = tk.Frame(self._main_window,
                                      bg=REGULAR_COLOR)
+
         self._timer_label = tk.Label(self._right_frame,
                                      **RIGHT_LABEL_STYLE,
                                      height=1)
@@ -160,17 +171,20 @@ class BoggleGui:
                                      height=1, text="")
 
         self._create_start_clear_frame()
+
         self._create_words_list_frame()
+
         self._check_button = tk.Button(self._right_frame, text="Check!",
                                        **CHECK_BUTTON_STYLE)
 
     def _create_start_clear_frame(self):
         """
-        TODO
-        :return:
+        this function inits the frame that contains the start and clear
+        buttons.
         """
         self._start_clear_frame = tk.Frame(self._right_frame,
                                            bg=REGULAR_COLOR)
+
         self._clear_button = tk.Button(self._start_clear_frame,
                                        text="Clear",
                                        **START_CLEAR_BUTTON_STYLE)
@@ -180,11 +194,14 @@ class BoggleGui:
 
     def _create_words_list_frame(self):
         """
-        TODO
-        :return:
+        this function inits the frame that contains the scrollbar that will
+        contain the correct words the user entered.
         """
+        # init the frame:
         self._scrollbar_frame = tk.Frame(self._right_frame, bg=REGULAR_COLOR)
+        # init the scrollbar:
         self._words_scrollbar = tk.Scrollbar(self._scrollbar_frame)
+        # init the list that the scrollbar will contain:
         self._found_words_list = tk.Listbox(self._scrollbar_frame,
                                             yscrollcommand=
                                             self._words_scrollbar.set,
@@ -192,15 +209,14 @@ class BoggleGui:
 
     def _pack(self):
         """
-        TODO
-        :return:
+        this function packs all the widgets on a specific order.
         """
-        # Pack left frame:
+        # Pack left frame and the widgets it contains:
         self._left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self._curr_word_label.pack(side=tk.TOP, fill=tk.BOTH,expand=True)
         self._buttons_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
-        # Pack right frame:
+        # Pack right frame and the widgets it contains:
         self._right_frame.pack(fill=tk.BOTH, expand=True)
         self._timer_label.pack(side=tk.TOP)
         self._score_label.pack(side=tk.TOP)
@@ -213,22 +229,30 @@ class BoggleGui:
         self._check_button.pack(side=tk.TOP, ipady=9)
 
     def run(self):
+        """
+        this function starts the mainloop of the main window.
+        :return:
+        """
         self._main_window.mainloop()
 
     def start_stop_game(self, new_board):
         """
-        TODO
-        :param new_board:
-        :return:
+        this function starts and stops the game according to the start_button
+        label text.
+        :param new_board: the board of the new game.
         """
         # Start the game:
         if self._start_button["text"] == "Start":
+            # initiating the text on the labels of the games:
             self._start_button["text"] = "Stop"
             self._found_words_list.delete(0, tk.END)
             self._score_label["text"] = "0"
 
+            # after the user pressed start, revealing the chars that the button
+            # contains:
             for button, button_data in self._grid_buttons_to_data.items():
                 button["text"] = button_data[CHAR_INDEX]
+            # starting the timer and its animation:
             self._timer.start_timer()
             self._animate_timer()
 
