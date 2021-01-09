@@ -25,6 +25,13 @@ LEFT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
 
 RIGHT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
                      "width": 7, "relief": "ridge"}
+
+LISTBOX_STYLE = {'bg': 'azure',
+                 'selectbackground': 'azure',
+                 'selectforeground': 'Black',
+                 'activestyle': 'none',
+                 'relief': 'flat',
+                 'width': 26, 'height': 11}
 CHAR_INDEX = 0
 COORD_INDEX = 1
 
@@ -35,7 +42,6 @@ class BoggleGui:
         self._timer = timer
         self._end_timer_action = None
         self._main_window = tk.Tk()
-        # self._main_window.eval("tk::PlaceWindow . center")
         self._main_window.title("Boggle")
         self._main_window.resizable(False, False)
         self._init_left_frame()
@@ -95,7 +101,6 @@ class BoggleGui:
             for col_index, char in enumerate(row):
                 self._make_button_on_grid(char, row_index, col_index)
 
-
     def _make_button_on_grid(self, button_char: str,
                              row: int, col: int,) -> tk.Button:
         """
@@ -137,7 +142,7 @@ class BoggleGui:
                                      height=1, text="0")
 
         self._create_start_clear_frame()
-        self._create_scrollbar_frame()
+        self._create_words_list_frame()
         self._check_button = tk.Button(self._right_frame, text="Check!",
                                        **START_CLEAR_BUTTON_STYLE)
 
@@ -155,8 +160,7 @@ class BoggleGui:
                                        text="Start",
                                        **START_CLEAR_BUTTON_STYLE)
 
-    def _create_scrollbar_frame(self):
-        # TODO: leyafyef.
+    def _create_words_list_frame(self):
         """
         TODO
         :return:
@@ -166,7 +170,7 @@ class BoggleGui:
         self._found_words_list = tk.Listbox(self._scrollbar_frame,
                                             yscrollcommand=
                                             self._words_scrollbar.set,
-                                            width=26, height=11)
+                                            **LISTBOX_STYLE)
 
     def _pack(self):
         """
