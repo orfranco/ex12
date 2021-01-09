@@ -1,6 +1,15 @@
+##############################################################################
+# FILE: boggle_logic.py
+# WRITERS:
+#         Nimrod Bar Giora , nimrodnm , 207090622
+#         Or Franco, or.franco, TODO: add id
+# EXERCISE: intro2cs1 ex12 2021
+# DESCRIPTION: A class that run the logic of a Boggle game.
+##############################################################################
 import ex12_utils as utils
 from typing import Optional, Set, List, Tuple
 import time
+
 
 STARTING_SCORE = 0
 
@@ -38,7 +47,7 @@ class BoggleLogic:
         """
         self.__score += n ** 2
 
-    def get_score(self):
+    def get_score(self) -> int:
         """
         TODO
         :return:
@@ -77,6 +86,7 @@ class BoggleLogic:
                                    self.__curr_path,
                                    self.__words_dict)
         self.clear_path()
+
         if word and word not in self._found_words:
             self.update_score(len(word))
             self._found_words.add(word)
@@ -126,7 +136,7 @@ class Timer:
     This is a class of timers.
     """
 
-    def __init__(self, duration):
+    def __init__(self, duration: int):
         self.__start_time = 0
         self.__end_time = 0
         self.__duration = duration
@@ -139,7 +149,7 @@ class Timer:
         self.__start_time = int(time.time())
         self.__end_time = self.__start_time + self.__duration
 
-    def _calculate_time(self) -> Optional[int]:
+    def _calculate_time(self) -> int:
         """
         This method calculates the remaining time of the timer in 'self'.
         :return: The remaining time in seconds, or None if time is over.
@@ -161,7 +171,7 @@ class Timer:
 
 def convert_to_minutes_format(time_in_secs: int) -> str:
     """
-    This functions converts takes seconds as input,
+    This functions takes seconds as input,
     and returns the time in minutes (as a string).
     :param time_in_secs: The time in seconds (integer).
     :return: A string representing the time in this format: m:ss

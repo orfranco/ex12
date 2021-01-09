@@ -1,3 +1,11 @@
+##############################################################################
+# FILE: ex12_utils.py
+# WRITERS:
+#         Nimrod Bar Giora , nimrodnm , 207090622
+#         Or Franco, or.franco, TODO: add id
+# EXERCISE: intro2cs1 ex12 2021
+# DESCRIPTION: Utilities to help run a Boggle game.
+##############################################################################
 from typing import List, Tuple, Dict, Optional
 
 # Constants:
@@ -11,7 +19,7 @@ MAX_WORD_LENGTH = 16
 
 def load_words_dict(file_path: str) -> Dict[str, bool]:
     """
-
+    This function loads the words in the given words_dict file.
     :param file_path: the path to the file containing the words.
     :return: a dictionary containing the words on the file as keys, and True
     for all the values.
@@ -32,8 +40,7 @@ def is_valid_path(board: List[List[str]],
                   path: List[Tuple[int, int]],
                   words: Dict) -> Optional[str]:
     """
-    This function checks if the given path (list of coordinates on the board)
-
+    This function checks if the given path (list of coordinates on the board).
     :param board:
     :param path:
     :param words:
@@ -43,6 +50,7 @@ def is_valid_path(board: List[List[str]],
     #       Should we raise exception when a coordinate is outside the board?
     word: str = ""
 
+    # Create a word from the given path:
     for index_in_path, coord in enumerate(path):
         row_index, col_index = coord[ROW_INDEX], coord[COL_INDEX]
 

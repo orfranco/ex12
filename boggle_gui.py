@@ -1,5 +1,13 @@
+##############################################################################
+# FILE: boggle_gui.py
+# WRITERS:
+#         Nimrod Bar Giora , nimrodnm , 207090622
+#         Or Franco, or.franco, TODO: add id
+# EXERCISE: intro2cs1 ex12 2021
+# DESCRIPTION: A GUI class for a Boggle game.
+##############################################################################
 import tkinter as tk
-from typing import Any, Dict, Tuple, List
+from typing import Any, Dict, Tuple, Callable, List
 
 # Fonts
 COURIER_27 = ("Courier", 27)
@@ -25,12 +33,11 @@ START_CLEAR_BUTTON_STYLE = {"font": ("Courier", 14),
                             "width": 7,
                             "activebackground": BUTTON_ACTIVE_COLOR}
 CHECK_BUTTON_STYLE = {"font": ("Courier", 14),
-                            "borderwidth": 1,
-                            "relief": "raised",
-                            "bg": "DodgerBlue3",
-                            "width": 15,
-                            "height": 2,
-                            "activebackground": BUTTON_ACTIVE_COLOR}
+                      "borderwidth": 1,
+                      "relief": "raised",
+                      "bg": "DodgerBlue3",
+                      "width": 15, "height": 2,
+                      "activebackground": BUTTON_ACTIVE_COLOR}
 
 LEFT_LABEL_STYLE = {"font": COURIER_27, "bg": REGULAR_COLOR,
                     "width": 16, "height": 2, "relief": "groove"}
@@ -50,36 +57,37 @@ PLAY_AGAIN_BUTTON_STYLE = {'text': 'Yes', 'font': CALIBRI_11, 'width': 4}
 QUIT_BUTTON_STYLE = {'text': 'No', 'font': CALIBRI_11, 'width': 4}
 
 # Constants:
+MAIN_WINDOW_TITLE = "Boggle !!!"
+CHECK_BUTTON_TEXT = "Check!"
+CLEAR_BUTTON_TEXT = "Clear"
 CHAR_INDEX = 0
 COORD_INDEX = 1
 
 
 class BoggleGui:
     """
-    TODO:
+    This is a class that creates and runs a GUI for Boggle games.
     """
     def __init__(self, board: List[List[str]], timer: Any):
         """
-        the constructor of the Boggle Gui.
+        The constructor of the Boggle Gui.
         :param board: the board that will be played on the first game.
         :param timer: the timer object.
         """
         self._board = board
         self._timer = timer
-
+        self._end_timer_action = None
         self._main_window = tk.Tk()
-        self._main_window.title("Boggle")
+        self._main_window.title(MAIN_WINDOW_TITLE)
         self._main_window.resizable(False, False)
-
         self._init_left_frame()
         self._init_right_frame()
-
         self._pack()
         self._center_main_window()
 
     def _center_main_window(self):
         """
-        this function centres the main window.
+        This function centres the main window on the screen.
         """
         self._main_window.update_idletasks()
         # Get main window and screen dimensions:
@@ -99,9 +107,7 @@ class BoggleGui:
         """
         this function inits the left frame and the widgets it contains.
         """
-        self._left_frame = tk.Frame(self._main_window,
-                                    bg=REGULAR_COLOR)
-
+        self._left_frame = tk.Frame(self._main_window, bg=REGULAR_COLOR)
         self._curr_word_label = tk.Label(self._left_frame, **LEFT_LABEL_STYLE)
         self._buttons_frame = tk.Frame(self._left_frame)
 
@@ -136,11 +142,11 @@ class BoggleGui:
         :return: a button widget that is placed on the grid, and contains the
                 char that was given.
         """
-        # creates the button widget and places it on the grid:
+        # Creates the button widget and places it on the grid:
         button = tk.Button(self._buttons_frame, text="", **BUTTON_STYLE)
         button.grid(row=row, column=col, sticky=tk.NSEW)
 
-        # adds the button and its data to the buttons dictionaries:
+        # Adds the button and its data to the buttons dictionaries:
         self._grid_buttons_to_data[button] = (button_char, (row, col))
         self._coords_to_buttons[(row, col)] = button
 
@@ -160,9 +166,7 @@ class BoggleGui:
         """
         this function inits the right frame and the widgets it contains.
         """
-        self._right_frame = tk.Frame(self._main_window,
-                                     bg=REGULAR_COLOR)
-
+        self._right_frame = tk.Frame(self._main_window, bg=REGULAR_COLOR)
         self._timer_label = tk.Label(self._right_frame,
                                      **RIGHT_LABEL_STYLE,
                                      height=1)
@@ -174,19 +178,18 @@ class BoggleGui:
 
         self._create_words_list_frame()
 
-        self._check_button = tk.Button(self._right_frame, text="Check!",
+        self._check_button = tk.Button(self._right_frame,
+                                       text=CHECK_BUTTON_TEXT,
                                        **CHECK_BUTTON_STYLE)
 
     def _create_start_clear_frame(self):
         """
-        this function inits the frame that contains the start and clear
+        this function creates the frame that contains the start and clear
         buttons.
         """
-        self._start_clear_frame = tk.Frame(self._right_frame,
-                                           bg=REGULAR_COLOR)
-
+        self._start_clear_frame = tk.Frame(self._right_frame, bg=REGULAR_COLOR)
         self._clear_button = tk.Button(self._start_clear_frame,
-                                       text="Clear",
+                                       text=CLEAR_BUTTON_TEXT,
                                        **START_CLEAR_BUTTON_STYLE)
         self._start_button = tk.Button(self._start_clear_frame,
                                        text="Start",
@@ -194,8 +197,8 @@ class BoggleGui:
 
     def _create_words_list_frame(self):
         """
-        this function inits the frame that contains the scrollbar that will
-        contain the correct words the user entered.
+        This function creates a frame that will contain the correct words the
+        user will find, with a scrollbar.
         """
         # init the frame:
         self._scrollbar_frame = tk.Frame(self._right_frame, bg=REGULAR_COLOR)
@@ -209,11 +212,12 @@ class BoggleGui:
 
     def _pack(self):
         """
-        this function packs all the widgets on a specific order.
+        This function packs all the widgets in the main window
+        in the correct order.
         """
         # Pack left frame and the widgets it contains:
         self._left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        self._curr_word_label.pack(side=tk.TOP, fill=tk.BOTH,expand=True)
+        self._curr_word_label.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         self._buttons_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
         # Pack right frame and the widgets it contains:
@@ -230,40 +234,36 @@ class BoggleGui:
 
     def run(self):
         """
-        this function starts the mainloop of the main window.
-        :return:
+        This function starts the mainloop of the main window.
         """
         self._main_window.mainloop()
 
-    def start_stop_game(self, new_board):
+    def start_stop_game(self, new_board: List[List[str]]):
         """
-        this function starts and stops the game according to the start_button
+        This function starts and stops the game according to the start_button
         label text.
-        :param new_board: the board of the new game.
+        :param new_board: The board of the new game.
         """
         # Start the game:
         if self._start_button["text"] == "Start":
-            # initiating the text on the labels of the games:
+            # Initializing the text on the labels of the games:
             self._start_button["text"] = "Stop"
             self._found_words_list.delete(0, tk.END)
             self._score_label["text"] = "0"
-
-            # after the user pressed start, revealing the chars that the button
-            # contains:
+            # Reveal the characters on the grid:
             for button, button_data in self._grid_buttons_to_data.items():
                 button["text"] = button_data[CHAR_INDEX]
-            # starting the timer and its animation:
+            # Start the timer and its animation:
             self._timer.start_timer()
             self._animate_timer()
 
         else:
             self._stop_game(new_board)
 
-    def _stop_game(self, new_board):
+    def _stop_game(self, new_board: List[List[str]]):
         """
-        TODO
-        :param new_board:
-        :return:
+        This method stops the game and prepares the GUI for a new game.
+        :param new_board: A new board for the next game.
         """
         self._start_button["text"] = "Start"
         self._board = new_board
@@ -277,74 +277,116 @@ class BoggleGui:
         # Reload characters to the grid:
         for row in range(len(new_board)):
             for col in range(len(new_board)):
-                button = self._coords_to_buttons[(row, col)]
+                button: tk.Button = self._coords_to_buttons[(row, col)]
                 coord = (row, col)
                 new_char = new_board[row][col]
                 self._grid_buttons_to_data[button] = (new_char, coord)
                 self._coords_to_buttons[coord]["text"] = ""
-        self._popup()
+
+        # Open the popup window to show to score and offer another game:
+        self._game_end_popup()
 
     def _animate_timer(self):
         """
-        TODO
-        :return:
+        This method updates the timer label on the main window.
         """
         self._timer_label["text"] = self._timer.get_time()
 
+        # If the timer hasn't reached 0 - keep animating:
         if self._timer_label["text"] != "0:00":
             self._timer_animator_id = \
                 self._main_window.after(100, self._animate_timer)
-        else:
+        else:  # The timer has reached 0:
             self._end_timer_action()
 
-    def get_timer_label(self):
-        return self._timer_label
-
-    def get_chars_buttons(self) -> Dict[tk.Button, Tuple[str, Tuple[int, int]]]:
+    def get_chars_buttons(self) -> Dict[tk.Button, Tuple[str, Tuple[int,int]]]:
         """
-        TODO
-        :return:
+        This method returns a dictionary with all of the character-buttons on
+        the main window. Each key is a button on the characters grid, and its
+        value is a tuple containing:
+        1) The character it holds. 2) Its coordinates on the grid.
         """
         return self._grid_buttons_to_data
 
-    def set_grid_button_command(self, button, action):
+    def set_grid_button_command(self, button: tk.Button, action: Callable):
+        """
+        This method binds the given action to the given button on the
+        characters grid.
+        :param button: A character button on the characters grid.
+        :param action: The function that will run when the user presses on
+                       this character button.
+        """
         button["command"] = action
 
-    def set_clear_command(self, action):
+    def set_clear_command(self, action: Callable):
+        """
+        this method binds the given action (a function) to the clear button.
+        :param action: The function that will run when the player presses the
+                       clear button.
+        """
         self._clear_button["command"] = action
 
-    def set_check_command(self, action):
+    def set_check_command(self, action: Callable):
+        """
+        This method binds the given action (a function) to the check button.
+        :param action: The function that will run when the player presses the
+                       check button.
+        """
         self._check_button["command"] = action
 
-    def set_start_stop_command(self, action):
+    def set_start_stop_command(self, action: Callable):
+        """
+        This method binds the given action (a function) to the start/stop
+        button.
+        :param action: The function that will run when the player presses the
+                       start/stop button.
+        """
         self._start_button["command"] = action
 
-    def set_end_timer_action_command(self, action):
+    def set_end_timer_action_command(self, action: Callable):
+        """
+        This method binds the given action (a function) to an attribute which
+        will be used when the timer has reached 0 (the game has ended).
+        :param action: The function that will run when the timer reaches 0.
+        """
         self._end_timer_action = action
 
-    def update_curr_word_label(self, char, is_clear=False):
+    def update_curr_word_label(self, char: str, is_clear=False):
+        """
+        This method updates the label that shows the word that the player is
+        currently constructing.
+        Will add each character after the player chose it (if is_clear=False),
+        and will clear the label if the player pushed the "clear"
+        button (is_clear=True).
+        :param char: The character to be added to the label.
+        :param is_clear: if False - add the given char to the label.
+                         If True - clear the label.
+        """
         if not is_clear:
             self._curr_word_label["text"] += char
         else:
             self._curr_word_label["text"] = ""
 
-    def good_choice(self, score, word):
+    def good_choice(self, score: int, word: str):
         """
-        TODO
-        :param score:
-        :param word:
-        :return:
+        This method is called when a correct word was chosen by the player.
+        It updates the score label on the main window, and adds the chosen
+        word to the words list on the main window.
+        :param score: The updated score (integer).
+        :param word: The word that the player chose (string).
         """
         self._score_label["text"] = score
         self._found_words_list.insert(tk.END, word)
 
-    def _popup(self):
+    def _game_end_popup(self):
         """
         This method creates a popup window that shows the score the user has
         earned, and asks him if he wants to play again.
         """
         popup = tk.Toplevel(self._main_window, bg=REGULAR_COLOR)
         popup.resizable(False, False)
+        popup.wm_title("Game Ended")
+
         # Make sure its impossible to click on the main window:
         popup.transient(self._main_window)
         popup.grab_set()
@@ -362,10 +404,8 @@ class BoggleGui:
             popup.destroy()
             self._main_window.destroy()
 
-        popup.wm_title("Game Stopped")
         score_label = tk.Label(popup,
-                               text=
-                               SCORE_TEXT.format(self._score_label['text']),
+                               text=SCORE_TEXT.format(self._score_label['text']),
                                font=CALIBRI_11, bg=REGULAR_COLOR,
                                width=24)
         question_label = tk.Label(popup, text=QUESTION_TEXT,
@@ -373,6 +413,7 @@ class BoggleGui:
                                   bg=REGULAR_COLOR)
         score_label.pack(side='top', fill='x', pady=10)
         question_label.pack(side='top', fill='x', pady=10)
+
         buttons_frame = tk.Frame(popup)
         play_again_button = tk.Button(popup,
                                       **PLAY_AGAIN_BUTTON_STYLE,
@@ -381,12 +422,9 @@ class BoggleGui:
         buttons_frame.pack(fill=tk.BOTH, expand=True)
         play_again_button.pack(side=tk.LEFT, padx=(40, 0), pady=5)
         quit_button.pack(side=tk.RIGHT, padx=(0, 40))
+
         popup.mainloop()
 
 # TODO:
-#  1) Fix popup:
-#     - center. done
-#     - yifyuf
-#  2) yifyuf main window
 #  3) Add tests!
 #  4) Document!.
