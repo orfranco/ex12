@@ -1,9 +1,9 @@
 import tkinter as tk
 from typing import Optional, Any, Dict, Tuple
 
+# Styles:
 COURIER_30 = ("Courier", 30)
 CALIBRI_11 = ("Calibri", 11)
-
 BUTTON_HOVER_COLOR = 'sky blue'
 REGULAR_COLOR = 'LightSteelBlue3'
 BUTTON_ACTIVE_COLOR = 'dark turquoise'
@@ -13,7 +13,6 @@ BUTTON_STYLE = {"font": ("Courier", 30),
                 "relief": "groove",
                 "bg": REGULAR_COLOR,
                 "activebackground": BUTTON_ACTIVE_COLOR}
-
 START_CLEAR_BUTTON_STYLE = {"font": ("Courier", 14),
                             "borderwidth": 1,
                             "relief": "raised",
@@ -30,16 +29,21 @@ CHECK_BUTTON_STYLE = {"font": ("Courier", 14),
                             "activebackground": BUTTON_ACTIVE_COLOR}
 LEFT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
                     "width": 15, "height": 2, "relief": "groove"}
-
 RIGHT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
                      "width": 7, "relief": "flat"}
-
 LISTBOX_STYLE = {'bg': 'azure',
                  'selectbackground': 'azure',
                  'selectforeground': 'Black',
                  'activestyle': 'none',
                  'relief': 'flat',
                  'width': 26, 'height': 11}
+# Popup style:
+SCORE_TEXT = "Your Score: {}"
+QUESTION_TEXT = "Do you want to play again?"
+PLAY_AGAIN_BUTTON_STYLE = {'text': 'Yes', 'font': CALIBRI_11, 'width': 4}
+QUIT_BUTTON_STYLE = {'text': 'No', 'font': CALIBRI_11, 'width': 4}
+
+# Constants:
 CHAR_INDEX = 0
 COORD_INDEX = 1
 
@@ -322,27 +326,22 @@ class BoggleGui:
             self._main_window.destroy()
 
         popup.wm_title("Game Stopped")
-        # text_frame = tk.Frame(popup, relief=tk.RAISED, borderwidth=1)
         score_label = tk.Label(popup,
                                text=
-                               f"Your Score: {self._score_label['text']}",
+                               SCORE_TEXT.format(self._score_label['text']),
                                font=CALIBRI_11,
                                width=24)
         question_label = tk.Label(popup,
-                                  text="Do you want to play again?",
+                                  text=QUESTION_TEXT,
                                   font=CALIBRI_11)
         score_label.pack(side='top', fill='x', pady=10)
         question_label.pack(side='top', fill='x', pady=10)
         buttons_frame = tk.Frame(popup)
         play_again_button = tk.Button(popup,
-                                      text="Yes",
-                                      font=CALIBRI_11,
-                                      width=4,
+                                      **PLAY_AGAIN_BUTTON_STYLE,
                                       command=play_again)
         quit_button = tk.Button(popup,
-                                text="No",
-                                font=CALIBRI_11,
-                                width=4,
+                                **QUIT_BUTTON_STYLE,
                                 command=quit_cmd)
         buttons_frame.pack(fill=tk.BOTH, expand=True)
         play_again_button.pack(side=tk.LEFT, padx=(40, 0), pady=5)
