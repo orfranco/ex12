@@ -3,6 +3,7 @@ from typing import Optional, Any, Dict, Tuple
 
 
 COURIER_30 = ("Courier", 30)
+CALIBRI_11 = ("Calibri", "11",)
 
 BUTTON_HOVER_COLOR = 'sky blue'
 REGULAR_COLOR = 'azure'
@@ -34,11 +35,32 @@ class BoggleGui:
         self._timer = timer
         self._end_timer_action = None
         self._main_window = tk.Tk()
+        # self._main_window.eval("tk::PlaceWindow . center")
         self._main_window.title("Boggle")
         self._main_window.resizable(False, False)
         self._init_left_frame()
         self._init_right_frame()
         self._pack()
+        self._center_main_window()
+
+    def _center_main_window(self):
+        """
+        TODO
+        :return:
+        """
+        self._main_window.update_idletasks()
+        # Get main window and screen dimensions:
+        root_w = self._main_window.winfo_width()
+        root_h = self._main_window.winfo_height()
+        screen_w = self._main_window.winfo_screenwidth()
+        screen_h = self._main_window.winfo_screenheight()
+
+        # Calculate the coordinates for the main window:
+        x = (screen_w / 2) - (root_w / 2)
+        y = (screen_h / 2) - (root_h / 2)
+
+        # Set the dimensions and the placement of the main window:
+        self._main_window.geometry('%dx%d+%d+%d' % (root_w, root_h, x, y))
 
     def _init_left_frame(self):
         """
@@ -276,6 +298,9 @@ class BoggleGui:
         popup.transient(self._main_window)
         popup.grab_set()
 
+        # Center the popup on the screen:
+        self._main_window.eval(f"tk::PlaceWindow {str(popup)} center")
+
         def play_again():
             self._end_timer_action()
             popup.destroy()
@@ -285,24 +310,36 @@ class BoggleGui:
             self._main_window.destroy()
 
         popup.wm_title("Game Stopped")
+        # text_frame = tk.Frame(popup, relief=tk.RAISED, borderwidth=1)
         score_label = tk.Label(popup,
                                text=
                                f"Your Score: {self._score_label['text']}",
+                               font=CALIBRI_11,
                                width=24)
-        question_label = tk.Label(popup, text="Do you want to play again?")
+        question_label = tk.Label(popup,
+                                  text="Do you want to play again?",
+                                  font=CALIBRI_11)
         score_label.pack(side='top', fill='x', pady=10)
         question_label.pack(side='top', fill='x', pady=10)
         buttons_frame = tk.Frame(popup)
-        play_again_button = tk.Button(buttons_frame, text="Yes", command=play_again)
-        quit_button = tk.Button(buttons_frame, text="No", command=quit_cmd)
-        buttons_frame.pack(side="top")
-        play_again_button.pack(side = "left")
-        quit_button.pack(side="right")
+        play_again_button = tk.Button(popup,
+                                      text="Yes",
+                                      font=CALIBRI_11,
+                                      width=4,
+                                      command=play_again)
+        quit_button = tk.Button(popup,
+                                text="No",
+                                font=CALIBRI_11,
+                                width=4,
+                                command=quit_cmd)
+        buttons_frame.pack(fill=tk.BOTH, expand=True)
+        play_again_button.pack(side=tk.LEFT, padx=(40, 0), pady=5)
+        quit_button.pack(side=tk.RIGHT, padx=(0, 40))
         popup.mainloop()
 
 # TODO:
 #  1) Fix popup:
-#     - center
+#     - center. done
 #     - yifyuf
 #  2) yifyuf main window
 #  3) Add tests!
