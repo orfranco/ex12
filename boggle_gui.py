@@ -272,6 +272,7 @@ class BoggleGui:
 
     def _popup(self, new_board):
         popup = tk.Toplevel(self._main_window)
+        # Make sure its impossible to click on the main window:
         popup.transient(self._main_window)
         popup.grab_set()
 
@@ -283,17 +284,26 @@ class BoggleGui:
             popup.destroy()
             self._main_window.destroy()
 
-        popup.wm_title("Popup")
+        popup.wm_title("Game Stopped")
         score_label = tk.Label(popup,
-                               text=f"Your Score: {self._score_label['text']}",
-                                                                     width=24)
+                               text=
+                               f"Your Score: {self._score_label['text']}",
+                               width=24)
         question_label = tk.Label(popup, text="Do you want to play again?")
         score_label.pack(side='top', fill='x', pady=10)
         question_label.pack(side='top', fill='x', pady=10)
         buttons_frame = tk.Frame(popup)
         play_again_button = tk.Button(buttons_frame, text="Yes", command=play_again)
         quit_button = tk.Button(buttons_frame, text="No", command=quit_cmd)
-        buttons_frame.pack(side = "top")
+        buttons_frame.pack(side="top")
         play_again_button.pack(side = "left")
-        quit_button.pack(side = "right")
+        quit_button.pack(side="right")
         popup.mainloop()
+
+# TODO:
+#  1) Fix popup:
+#     - center
+#     - yifyuf
+#  2) yifyuf main window
+#  3) Add tests!
+#  4) Document!.
