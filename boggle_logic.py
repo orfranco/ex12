@@ -21,7 +21,7 @@ class BoggleLogic:
     def __init__(self, words_dict: Dict[str, bool], board: List[List[str]]):
         """
         The constructor of the Boggle Logic class.
-        :param words_dict: a dictionary contains all the legal words.
+        :param words_dict: a dictionary that contains all the legal words.
         :param board: the board that will be played on the first game.
         """
         self.__words_dict = words_dict

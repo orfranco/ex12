@@ -9,6 +9,7 @@
 import tkinter as tk
 from typing import Any, Dict, Tuple, Callable, List
 from PIL import ImageTk, Image
+
 # Fonts
 COURIER_27 = ("Courier", 27)
 COURIER_30 = ("Courier", 30)
@@ -35,7 +36,7 @@ START_CLEAR_BUTTON_STYLE = {"font": ("Courier", 14),
 CHECK_BUTTON_STYLE = {"font": ("Courier", 14),
                       "borderwidth": 1,
                       "relief": "raised",
-                      "bg": "DodgerBlue3",
+                      "bg": "DeepSkyBlue4",
                       "width": 15, "height": 2,
                       "activebackground": BUTTON_ACTIVE_COLOR}
 
@@ -57,6 +58,7 @@ PLAY_AGAIN_BUTTON_STYLE = {'text': 'Yes', 'font': CALIBRI_11, 'width': 4}
 QUIT_BUTTON_STYLE = {'text': 'No', 'font': CALIBRI_11, 'width': 4}
 
 # Constants:
+LOGO_IMAGE_FILE = "boggle_img.png"
 MAIN_WINDOW_TITLE = "Boggle !!!"
 CHECK_BUTTON_TEXT = "Check!"
 CLEAR_BUTTON_TEXT = "Clear"
@@ -80,6 +82,7 @@ class BoggleGui:
         self._main_window = tk.Tk()
         self._main_window.title(MAIN_WINDOW_TITLE)
         self._main_window.resizable(False, False)
+        self._init_logo()
         self._init_left_frame()
         self._init_right_frame()
         self._pack()
@@ -103,18 +106,23 @@ class BoggleGui:
         # Set the dimensions and the placement of the main window:
         self._main_window.geometry('%dx%d+%d+%d' % (root_w, root_h, x, y))
 
+    def _init_logo(self):
+        """
+        This method initializes the logo of the game at the top of the main
+        window.
+        """
+        headline_img = Image.open(LOGO_IMAGE_FILE)
+        headline_img = headline_img.resize((550, 80), Image.ANTIALIAS)
+        headline_img = ImageTk.PhotoImage(headline_img)
+        self._headline_label = tk.Label(self._main_window,
+                                        image=headline_img, bg="azure")
+        self._headline_label.image = headline_img
+
     def _init_left_frame(self):
         """
         this function inits the left frame and the widgets it contains.
         """
         self._left_frame = tk.Frame(self._main_window, bg=REGULAR_COLOR)
-        headline_img = Image.open("boggle_img.png")
-        headline_img = headline_img.resize((550, 80), Image.ANTIALIAS)
-        headline_img = ImageTk.PhotoImage(headline_img)
-        self._headline_label = tk.Label(self._main_window,
-                                        image=headline_img, bg="DodgerBlue3")
-        self._headline_label.image = headline_img
-
         self._curr_word_label = tk.Label(self._left_frame, **LEFT_LABEL_STYLE)
         self._buttons_frame = tk.Frame(self._left_frame)
 
@@ -173,7 +181,8 @@ class BoggleGui:
         """
         this function inits the right frame and the widgets it contains.
         """
-        self._right_frame = tk.Frame(self._main_window, bg=REGULAR_COLOR)
+        self._right_frame = tk.Frame(self._main_window, bg=REGULAR_COLOR,
+                                     borderwidth=1, relief=tk.GROOVE)
         self._timer_label = tk.Label(self._right_frame,
                                      **RIGHT_LABEL_STYLE,
                                      height=1)
