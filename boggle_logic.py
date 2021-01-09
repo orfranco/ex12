@@ -111,7 +111,6 @@ class BoggleLogic:
 
     # def all_words_found(self) -> bool:
     #     """
-    #     TODO
     #     :return:
     #     """
     #     if len(self._found_words) == len(self._all_possible_words):

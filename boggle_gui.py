@@ -335,18 +335,14 @@ class BoggleGui:
                                SCORE_TEXT.format(self._score_label['text']),
                                font=CALIBRI_11,
                                width=24)
-        question_label = tk.Label(popup,
-                                  text=QUESTION_TEXT,
-                                  font=CALIBRI_11)
+        question_label = tk.Label(popup, text=QUESTION_TEXT, font=CALIBRI_11)
         score_label.pack(side='top', fill='x', pady=10)
         question_label.pack(side='top', fill='x', pady=10)
         buttons_frame = tk.Frame(popup)
         play_again_button = tk.Button(popup,
                                       **PLAY_AGAIN_BUTTON_STYLE,
                                       command=play_again)
-        quit_button = tk.Button(popup,
-                                **QUIT_BUTTON_STYLE,
-                                command=quit_cmd)
+        quit_button = tk.Button(popup, **QUIT_BUTTON_STYLE, command=quit_cmd)
         buttons_frame.pack(fill=tk.BOTH, expand=True)
         play_again_button.pack(side=tk.LEFT, padx=(40, 0), pady=5)
         quit_button.pack(side=tk.RIGHT, padx=(0, 40))

@@ -9,7 +9,7 @@ MIN_WORD_LENGTH = 3
 MAX_WORD_LENGTH = 16
 
 
-def load_words_dict(file_path: str):
+def load_words_dict(file_path: str) -> Dict[str, bool]:
     """
 
     :param file_path: the path to the file containing the words.
@@ -53,6 +53,8 @@ def is_valid_path(board: List[List[str]],
         elif coord in possible_cells(path[:index_in_path], board):
             word += board[row_index][col_index]
 
+    # Make sure the created word is equal or bigger (if double chars on the
+    # board) from the path, and that the word is in the words dict:
     if len(word) >= len(path) and word in words:
         return word
 

@@ -14,6 +14,12 @@ BOARD_2 = [
     ['i', 'j', 'k', 'l'],
     ['p', 'o', 'n', 'm']
 ]
+BOARD_3 = [
+    ['n', 'qu', 'e', 'r'],
+    ['a', 'a', 's', 'o'],
+    ['o', 'r', 't', 'r'],
+    ['r', 'r', 'd', 'e']
+]
 
 nimrod = [(0, 0), (0, 1), (0, 2), (0, 3), (1, 3), (1, 2)]
 or_1, or_2, or_3, or_4, or_5 = [(2, 0), (2, 1)], [(1, 3), (2, 3)], [(1,3), (0,3)], [(2,0), (3,0)], [(2,0), (3,1)]
@@ -29,6 +35,7 @@ all_chars_1 = [(0,0), (0,1), (0,2), (0,3), (1,3), (1,2), (1,1), (1,0), (2,0),
               (2,1), (2,2), (2,3), (3,3), (3,2), (3,1), (3,0)]
 all_chars_2 = [(0,0), (0,1), (0,2), (0,3), (1,3), (1,2), (1,1), (1,0), (2,0),
                (3, 1), (2, 2), (2, 3), (3, 3), (3, 2), (2, 1), (3, 0)]
+double_char = [(0,1), (0,2), (1,2), (2,2)]
 invalid_1 = [(-1, 13), (25, 2), (0, 0)]
 invalid_2 = [(0, 0), (0, 1), (1, 1)]
 invalid_3 = [(0,0), (1,3)]
@@ -53,6 +60,8 @@ def test_is_valid_path():
     assert is_valid_path(BOARD_1, dad_2, WORDS_1) == "dad"
     assert is_valid_path(BOARD_1, dr_dre, WORDS_1) == "drdre"
     assert is_valid_path(BOARD_1, all_chars_1, WORDS_1) == "nimrodaaoraredrr"
+    assert is_valid_path(BOARD_2, all_chars_1, WORDS_1) == "abcdefghijklmnop"
+    assert is_valid_path(BOARD_3, double_char, WORDS_1) == "quest"
     assert is_valid_path(BOARD_1, invalid_1, WORDS_1) is None
     assert is_valid_path(BOARD_1, invalid_2, WORDS_1) is None
     assert is_valid_path(BOARD_1, invalid_3, WORDS_1) is None
