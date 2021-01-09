@@ -1,11 +1,12 @@
 import tkinter as tk
-from typing import Optional, Any, Dict, Tuple
+from typing import Any, Dict, Tuple
 
-# Styles:
+# Fonts
 COURIER_27 = ("Courier", 27)
 COURIER_30 = ("Courier", 30)
 CALIBRI_11 = ("Calibri", 11)
 
+# Styles:
 BUTTON_HOVER_COLOR = 'sky blue'
 REGULAR_COLOR = 'LightSteelBlue3'
 BUTTON_ACTIVE_COLOR = 'dark turquoise'
@@ -127,7 +128,7 @@ class BoggleGui:
         :param col:
         :return:
         """
-        button = tk.Button(self._buttons_frame, text="",**BUTTON_STYLE)
+        button = tk.Button(self._buttons_frame, text="", **BUTTON_STYLE)
         button.grid(row=row, column=col, sticky=tk.NSEW)
 
         self._grid_buttons_to_data[button] = (button_char, (row, col))
@@ -257,7 +258,7 @@ class BoggleGui:
                 new_char = new_board[row][col]
                 self._grid_buttons_to_data[button] = (new_char, coord)
                 self._coords_to_buttons[coord]["text"] = ""
-        self._popup(new_board)
+        self._popup()
 
     def _animate_timer(self):
         """
@@ -313,8 +314,13 @@ class BoggleGui:
         self._score_label["text"] = score
         self._found_words_list.insert(tk.END, word)
 
-    def _popup(self, new_board):
-        popup = tk.Toplevel(self._main_window)
+    def _popup(self):
+        """
+        This method creates a popup window that shows the score the user has
+        earned, and asks him if he wants to play again.
+        """
+        popup = tk.Toplevel(self._main_window, bg=REGULAR_COLOR)
+        popup.resizable(False, False)
         # Make sure its impossible to click on the main window:
         popup.transient(self._main_window)
         popup.grab_set()
@@ -323,10 +329,12 @@ class BoggleGui:
         self._main_window.eval(f"tk::PlaceWindow {str(popup)} center")
 
         def play_again():
+            """Restarts the game and destroys the popup window."""
             self._end_timer_action()
             popup.destroy()
 
         def quit_cmd():
+            """Closes the game."""
             popup.destroy()
             self._main_window.destroy()
 
@@ -334,9 +342,11 @@ class BoggleGui:
         score_label = tk.Label(popup,
                                text=
                                SCORE_TEXT.format(self._score_label['text']),
-                               font=CALIBRI_11,
+                               font=CALIBRI_11, bg=REGULAR_COLOR,
                                width=24)
-        question_label = tk.Label(popup, text=QUESTION_TEXT, font=CALIBRI_11)
+        question_label = tk.Label(popup, text=QUESTION_TEXT,
+                                  font=CALIBRI_11,
+                                  bg=REGULAR_COLOR)
         score_label.pack(side='top', fill='x', pady=10)
         question_label.pack(side='top', fill='x', pady=10)
         buttons_frame = tk.Frame(popup)
