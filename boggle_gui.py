@@ -8,7 +8,7 @@
 ##############################################################################
 import tkinter as tk
 from typing import Any, Dict, Tuple, Callable, List
-
+from PIL import ImageTk, Image
 # Fonts
 COURIER_27 = ("Courier", 27)
 COURIER_30 = ("Courier", 30)
@@ -108,6 +108,13 @@ class BoggleGui:
         this function inits the left frame and the widgets it contains.
         """
         self._left_frame = tk.Frame(self._main_window, bg=REGULAR_COLOR)
+        headline_img = Image.open("boggle_img.png")
+        headline_img = headline_img.resize((550, 80), Image.ANTIALIAS)
+        headline_img = ImageTk.PhotoImage(headline_img)
+        self._headline_label = tk.Label(self._main_window,
+                                        image=headline_img, bg="DodgerBlue3")
+        self._headline_label.image = headline_img
+
         self._curr_word_label = tk.Label(self._left_frame, **LEFT_LABEL_STYLE)
         self._buttons_frame = tk.Frame(self._left_frame)
 
@@ -216,6 +223,7 @@ class BoggleGui:
         in the correct order.
         """
         # Pack left frame and the widgets it contains:
+        self._headline_label.pack()
         self._left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self._curr_word_label.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         self._buttons_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
