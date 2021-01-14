@@ -15,14 +15,21 @@ with open(os.devnull, 'w') as f:
     # disable stdout
     oldstdout = sys.stdout
     sys.stdout = f
-    import pygame
+    # tries to open pygame,
+    try:
+        import pygame
+        pygame_imported = True
+    except:
+        pygame_imported = False
     # enable stdout
     sys.stdout = oldstdout
 
 
 # Fonts
 COURIER_27 = ("Courier", 27)
+COURIER_24 = ("Courier", 24)
 COURIER_30 = ("Courier", 30)
+COURIER_14 = ("Courier", 14)
 CALIBRI_11 = ("Calibri", 11)
 
 # Styles:
@@ -36,14 +43,14 @@ BUTTON_STYLE = {"font": ("Courier", 30),
                 "width": 1,
                 "height": 1,
                 "activebackground": BUTTON_ACTIVE_COLOR}
-START_CLEAR_BUTTON_STYLE = {"font": ("Courier", 14),
+START_CLEAR_BUTTON_STYLE = {"font": COURIER_14,
                             "borderwidth": 1,
                             "relief": "raised",
                             "bg": "DeepSkyBlue4",
                             "padx": 3,
                             "width": 7,
                             "activebackground": BUTTON_ACTIVE_COLOR}
-CHECK_BUTTON_STYLE = {"font": ("Courier", 14),
+CHECK_BUTTON_STYLE = {"font": COURIER_14,
                       "borderwidth": 1,
                       "relief": "raised",
                       "bg": "DeepSkyBlue4",
@@ -53,7 +60,7 @@ CHECK_BUTTON_STYLE = {"font": ("Courier", 14),
 LEFT_LABEL_STYLE = {"font": COURIER_27, "bg": REGULAR_COLOR,
                     "width": 16, "height": 2, "relief": "groove"}
 
-RIGHT_LABEL_STYLE = {"font": COURIER_30, "bg": REGULAR_COLOR,
+RIGHT_LABEL_STYLE = {"font": COURIER_24, "bg": REGULAR_COLOR,
                      "width": 7, "relief": "flat"}
 LISTBOX_STYLE = {'bg': 'azure',
                  'selectbackground': 'azure',
@@ -97,11 +104,13 @@ class BoggleGui:
         :param board: the board that will be played on the first game.
         :param timer: the timer object.
         """
-        pygame.init()
+        if pygame_imported:
+            pygame.init()
         self._board = board
         self._timer = timer
         self._end_timer_action = None
         self._main_window = tk.Tk()
+        self._main_window.geometry("570x450")
         self._main_window.title(MAIN_WINDOW_TITLE)
         self._main_window.resizable(False, False)
         self._init_logo()
@@ -256,20 +265,20 @@ class BoggleGui:
         # Pack left frame and the widgets it contains:
         self._headline_label.pack(fill=tk.BOTH)
         self._left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        self._curr_word_label.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-        self._buttons_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        self._curr_word_label.pack(side=tk.TOP, fill=tk.BOTH)
+        self._buttons_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
         # Pack right frame and the widgets it contains:
-        self._right_frame.pack(fill=tk.BOTH, expand=True)
-        self._timer_label.pack(side=tk.TOP)
-        self._score_label.pack(side=tk.TOP)
-        self._start_clear_frame.pack(side=tk.TOP)
-        self._clear_button.pack(side=tk.LEFT)
-        self._start_button.pack(side=tk.LEFT)
-        self._scrollbar_frame.pack(side=tk.TOP, fill=tk.Y)
-        self._words_scrollbar.pack(side=tk.RIGHT, fill=tk.BOTH)
-        self._found_words_list.pack(side=tk.LEFT)
-        self._check_button.pack(side=tk.TOP, ipady=9)
+        self._right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self._timer_label.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self._score_label.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self._start_clear_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self._clear_button.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self._start_button.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self._scrollbar_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self._words_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self._found_words_list.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self._check_button.pack(side=tk.TOP, fill=tk.BOTH, expand=True,ipady=8)
 
     def run(self):
         """
@@ -481,9 +490,10 @@ class BoggleGui:
         """
         This method plays sounds effect when buttons on the GUI are pressed.
         """
-        if clear_mixer:
-            pygame.mixer.pause()
+        if pygame_imported:
+            if clear_mixer:
+                pygame.mixer.pause()
 
-        sound = pygame.mixer.Sound(sound_file)
-        pygame.mixer.Channel(channel).set_volume(volume)
-        pygame.mixer.Channel(channel).play(sound)
+            sound = pygame.mixer.Sound(sound_file)
+            pygame.mixer.Channel(channel).set_volume(volume)
+            pygame.mixer.Channel(channel).play(sound)
