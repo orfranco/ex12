@@ -10,8 +10,14 @@ import tkinter as tk
 from typing import Any, Dict, Tuple, Callable, List
 import time
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
-import pygame
+import sys
+with open(os.devnull, 'w') as f:
+    # disable stdout
+    oldstdout = sys.stdout
+    sys.stdout = f
+    import pygame
+    # enable stdout
+    sys.stdout = oldstdout
 
 
 # Fonts
@@ -72,9 +78,9 @@ END_TIME = "0:00"
 START_NBA_TIME = "0:11"
 
 # Button sound effects:
-REGULAR_BUTTON_SOUND = "Sounds/basic-click-wooden.mp3"
-EXIT_GAME_SOUND = "Sounds/Close Door.mp3"
-NBA_SOUND = "Sounds/nba-games-tone.mp3"
+REGULAR_BUTTON_SOUND = "Sounds/basic-click-wooden_16.wav"
+EXIT_GAME_SOUND = "Sounds/Close Door.wav"
+NBA_SOUND = "Sounds/nba-games-tone.wav"
 DEFAULT_CHANNEL = 0
 NBA_CHANNEL = 1
 DEFAULT_VOLUME = 0.3
@@ -479,6 +485,5 @@ class BoggleGui:
             pygame.mixer.pause()
 
         sound = pygame.mixer.Sound(sound_file)
-        # pygame.mixer.music.load(sound_file)
         pygame.mixer.Channel(channel).set_volume(volume)
         pygame.mixer.Channel(channel).play(sound)
