@@ -19,10 +19,10 @@ CHAR_INDEX = 0
 COORD_INDEX = 1
 BUTTON_CMD_IDX = 0
 KEYBOARD_CMD_IDX = 1
-REGULAR_BUTTON_SOUND = "Sounds/basic-click-wooden_16.wav"
-GRID_BUTTON_SOUND = "Sounds/smart_screen_button_press.wav"
-GOOD_CHOICE_SOUND = "Sounds/Teleport-space-morph.wav"
-BAD_CHOICE_SOUND = "Sounds/error_tone.wav"
+REGULAR_BUTTON_SOUND = "Files/basic-click-wooden_16.wav"
+GRID_BUTTON_SOUND = "Files/smart_screen_button_press.wav"
+GOOD_CHOICE_SOUND = "Files/Teleport-space-morph.wav"
+BAD_CHOICE_SOUND = "Files/error_tone.wav"
 
 
 class BoggleController:

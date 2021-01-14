@@ -68,7 +68,7 @@ PLAY_AGAIN_BUTTON_STYLE = {'text': 'Yes', 'font': CALIBRI_11, 'width': 4}
 QUIT_BUTTON_STYLE = {'text': 'No', 'font': CALIBRI_11, 'width': 4}
 
 # Constants:
-LOGO_IMAGE_FILE = "boggle_img.png"
+LOGO_IMAGE_FILE = "Files/boggle_img.png"
 MAIN_WINDOW_TITLE = "Boggle !!!"
 CHECK_BUTTON_TEXT = "Check!"
 CLEAR_BUTTON_TEXT = "Clear"
@@ -78,9 +78,9 @@ END_TIME = "0:00"
 START_NBA_TIME = "0:11"
 
 # Button sound effects:
-REGULAR_BUTTON_SOUND = "Sounds/basic-click-wooden_16.wav"
-EXIT_GAME_SOUND = "Sounds/Close Door.wav"
-NBA_SOUND = "Sounds/nba-games-tone.wav"
+REGULAR_BUTTON_SOUND = "Files/basic-click-wooden_16.wav"
+EXIT_GAME_SOUND = "Files/Close Door.wav"
+NBA_SOUND = "Files/nba-games-tone.wav"
 DEFAULT_CHANNEL = 0
 NBA_CHANNEL = 1
 DEFAULT_VOLUME = 0.3
