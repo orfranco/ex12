@@ -9,6 +9,11 @@
 import tkinter as tk
 from typing import Any, Dict, Tuple, Callable, List
 from PIL import ImageTk, Image
+import time
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+import pygame
+
 
 # Fonts
 COURIER_27 = ("Courier", 27)
@@ -64,6 +69,17 @@ CHECK_BUTTON_TEXT = "Check!"
 CLEAR_BUTTON_TEXT = "Clear"
 CHAR_INDEX = 0
 COORD_INDEX = 1
+END_TIME = "0:00"
+START_NBA_TIME = "0:11"
+
+# Button sound effects:
+REGULAR_BUTTON_SOUND = "Sounds/basic-click-wooden.wav"
+EXIT_GAME_SOUND = "Sounds/Close Door.mp3"
+NBA_SOUND = "Sounds/nba-games-tone.mp3"
+DEFAULT_CHANNEL = 0
+NBA_CHANNEL = 1
+DEFAULT_VOLUME = 0.3
+NBA_VOLUME = 0.1
 
 
 class BoggleGui:
@@ -76,6 +92,7 @@ class BoggleGui:
         :param board: the board that will be played on the first game.
         :param timer: the timer object.
         """
+        pygame.init()
         self._board = board
         self._timer = timer
         self._end_timer_action = None
@@ -310,9 +327,11 @@ class BoggleGui:
         self._timer_label["text"] = self._timer.get_time()
 
         # If the timer hasn't reached 0 - keep animating:
-        if self._timer_label["text"] != "0:00":
+        if self._timer_label["text"] != END_TIME:
             self._timer_animator_id = \
                 self._main_window.after(100, self._animate_timer)
+            if self._timer_label["text"] == START_NBA_TIME:
+                self.play_button_sound(NBA_SOUND, NBA_CHANNEL, NBA_VOLUME)
         else:  # The timer has reached 0:
             self._end_timer_action()
 
@@ -418,11 +437,14 @@ class BoggleGui:
 
         def play_again():
             """Restarts the game and destroys the popup window."""
+            self.play_button_sound(REGULAR_BUTTON_SOUND, clear_mixer=True)
             self._end_timer_action()
             popup.destroy()
 
         def quit_cmd():
             """Closes the game."""
+            self.play_button_sound(EXIT_GAME_SOUND)
+            time.sleep(0.3)
             popup.destroy()
             self._main_window.destroy()
 
@@ -447,6 +469,16 @@ class BoggleGui:
 
         popup.mainloop()
 
-# TODO:
-#  3) Add tests!
-#  4) Document!.
+    def play_button_sound(self, sound_file,
+                          channel=DEFAULT_CHANNEL,
+                          volume=DEFAULT_VOLUME,
+                          clear_mixer=False):
+        """
+        This method plays sounds effect when buttons on the GUI are pressed.
+        """
+        if clear_mixer:
+            pygame.mixer.pause()
+
+        sound = pygame.mixer.Sound(sound_file)
+        pygame.mixer.Channel(channel).set_volume(volume)
+        pygame.mixer.Channel(channel).play(sound)

@@ -14,11 +14,15 @@ from typing import Any, Tuple, Callable
 
 # Constants:
 WORDS_FILE = "boggle_dict.txt"
-GAME_DURATION = 180
+GAME_DURATION = 13
 CHAR_INDEX = 0
 COORD_INDEX = 1
 BUTTON_CMD_IDX = 0
 KEYBOARD_CMD_IDX = 1
+REGULAR_BUTTON_SOUND = "Sounds/basic-click-wooden.wav"
+GRID_BUTTON_SOUND = "Sounds/smart_screen_button_press.mp3"
+GOOD_CHOICE_SOUND = "Sounds/Teleport-space-morph.wav"
+BAD_CHOICE_SOUND = "Sounds/error_tone.mp3"
 
 
 class BoggleController:
@@ -59,13 +63,26 @@ class BoggleController:
         self.__gui.set_check_command(check_action_1, check_action_2)
 
         # Set the start/stop command to run when the time is over:
-        timer_action = start_stop_action
+        timer_action = self._create_timer_action()
         self.__gui.set_end_timer_action_command(timer_action)
 
     def _create_start_stop_button_action(self) -> Callable:
         """
         this function creates and returns a function that calls the start_stop
         game functions on the logic and gui classes.
+        """
+        def command():
+            self.__board = randomize_board()
+            self.__logic.start_game(self.__board)
+            self.__gui.play_button_sound(REGULAR_BUTTON_SOUND, clear_mixer=True)
+            self.__gui.start_stop_game(self.__board)
+
+        return command
+
+    def _create_timer_action(self) -> Callable:
+        """
+
+        :return:
         """
         def command():
             self.__board = randomize_board()
@@ -86,6 +103,7 @@ class BoggleController:
             if button["text"]:
                 self.__logic.insert_coord_to_path(coord)
                 self.__gui.update_curr_word_label(button["text"])
+                self.__gui.play_button_sound(GRID_BUTTON_SOUND)
 
         return command
 
@@ -97,6 +115,7 @@ class BoggleController:
         def command():
             self.__logic.clear_path()
             self.__gui.update_curr_word_label("", True)
+            self.__gui.play_button_sound(REGULAR_BUTTON_SOUND)
         return command
 
     def _create_check_actions(self) -> Tuple[Callable, Callable]:
@@ -107,20 +126,20 @@ class BoggleController:
         One that will be connected to the check button of the GUI,
         Second that binds the space and enter keys to the same operation.
         """
-        def button_command():
+        def check_command():
             word = self.__logic.submit_word()
             if word:
                 self.__gui.good_choice(self.__logic.get_score(), word)
+                self.__gui.play_button_sound(GOOD_CHOICE_SOUND)
+            else:
+                self.__gui.play_button_sound(BAD_CHOICE_SOUND)
             self.__gui.update_curr_word_label("", True)
 
         def keyboard_command(key):
             if key.keysym == 'Return' or key.keysym == 'space':
-                word = self.__logic.submit_word()
-                if word:
-                    self.__gui.good_choice(self.__logic.get_score(), word)
-                self.__gui.update_curr_word_label("", True)
+                check_command()
 
-        return button_command, keyboard_command
+        return check_command, keyboard_command
 
     def run(self):
         """
