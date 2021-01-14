@@ -30,7 +30,7 @@ def load_words_dict(file_path: str) -> Dict[str, bool]:
     with open(file_path, 'r') as words_file:
         for line in words_file.readlines():
             replaced_line = line.replace("\n", "")
-            if replaced_line:
+            if replaced_line:  # Checks if the line is not empty.
                 words_dict[line.replace("\n", "")] = True
 
     return words_dict
