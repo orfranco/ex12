@@ -14,14 +14,14 @@ from typing import Any, Tuple, Callable
 
 # Constants:
 WORDS_FILE = "boggle_dict.txt"
-GAME_DURATION = 13
+GAME_DURATION = 180
 CHAR_INDEX = 0
 COORD_INDEX = 1
 BUTTON_CMD_IDX = 0
 KEYBOARD_CMD_IDX = 1
-REGULAR_BUTTON_SOUND = "Sounds/basic-click-wooden.wav"
+REGULAR_BUTTON_SOUND = "Sounds/basic-click-wooden.mp3"
 GRID_BUTTON_SOUND = "Sounds/smart_screen_button_press.mp3"
-GOOD_CHOICE_SOUND = "Sounds/Teleport-space-morph.wav"
+GOOD_CHOICE_SOUND = "Sounds/Teleport-space-morph.mp3"
 BAD_CHOICE_SOUND = "Sounds/error_tone.mp3"
 
 

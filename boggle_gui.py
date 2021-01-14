@@ -8,7 +8,6 @@
 ##############################################################################
 import tkinter as tk
 from typing import Any, Dict, Tuple, Callable, List
-from PIL import ImageTk, Image
 import time
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
@@ -73,7 +72,7 @@ END_TIME = "0:00"
 START_NBA_TIME = "0:11"
 
 # Button sound effects:
-REGULAR_BUTTON_SOUND = "Sounds/basic-click-wooden.wav"
+REGULAR_BUTTON_SOUND = "Sounds/basic-click-wooden.mp3"
 EXIT_GAME_SOUND = "Sounds/Close Door.mp3"
 NBA_SOUND = "Sounds/nba-games-tone.mp3"
 DEFAULT_CHANNEL = 0
@@ -128,9 +127,9 @@ class BoggleGui:
         This method initializes the logo of the game at the top of the main
         window.
         """
-        headline_img = Image.open(LOGO_IMAGE_FILE)
-        headline_img = headline_img.resize((550, 80), Image.ANTIALIAS)
-        headline_img = ImageTk.PhotoImage(headline_img)
+        headline_img = tk.PhotoImage(file=LOGO_IMAGE_FILE)
+        headline_img = headline_img.zoom(4, 4)
+        headline_img = headline_img.subsample(4, 10)
         self._headline_label = tk.Label(self._main_window,
                                         image=headline_img, bg="azure")
         self._headline_label.image = headline_img
@@ -249,7 +248,7 @@ class BoggleGui:
         in the correct order.
         """
         # Pack left frame and the widgets it contains:
-        self._headline_label.pack()
+        self._headline_label.pack(fill=tk.BOTH)
         self._left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self._curr_word_label.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         self._buttons_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
@@ -480,5 +479,6 @@ class BoggleGui:
             pygame.mixer.pause()
 
         sound = pygame.mixer.Sound(sound_file)
+        # pygame.mixer.music.load(sound_file)
         pygame.mixer.Channel(channel).set_volume(volume)
         pygame.mixer.Channel(channel).play(sound)
