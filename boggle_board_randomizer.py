@@ -21,6 +21,7 @@ LETTERS = [
 ]
 
 
+
 def randomize_board(dice_list=LETTERS):
     dice_indices = list(range(len(dice_list)))
     random.shuffle(dice_indices)
