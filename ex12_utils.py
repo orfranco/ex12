@@ -24,9 +24,7 @@ def load_words_dict(file_path: str) -> Dict[str, bool]:
     :return: a dictionary containing the words on the file as keys, and True
     for all the values.
     """
-    # TODO: think about more test cases.
     words_dict = dict()
-
     with open(file_path, 'r') as words_file:
         for line in words_file.readlines():
             replaced_line = line.replace("\n", "")
@@ -46,8 +44,6 @@ def is_valid_path(board: List[List[str]],
     :param words:
     :return:
     """
-    # TODO: Should we make sure the board contains only string (and not ints)?
-    #       Should we raise exception when a coordinate is outside the board?
     word: str = ""
 
     # Create a word from the given path:
@@ -76,7 +72,6 @@ def coord_in_board(coord: Tuple[int, int], board: List[List[str]]) -> bool:
     :param board: The board. a 2 dimensional list.
     :return: True if the coordinate is in the board, or False otherwise.
     """
-    # TODO: Will the board always be a square?
     board_size: int = len(board)  # Board should always be a square.
     row_index, col_index = coord[ROW_INDEX], coord[COL_INDEX]
 
