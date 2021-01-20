@@ -43,7 +43,12 @@ class BoggleController:
         # Create Logic and GUI objects:
         self.__gui = BoggleGui(self.__board, Timer(GAME_DURATION))
         self.__logic = BoggleLogic(self.__words_dict, self.__board)
+        self._function_to_btn_init()
 
+    def _function_to_btn_init(self):
+        """
+        this function creates and assigns functions to the gui buttons.
+        """
         # Create a function for the start/stop button of the GUI, and set it:
         start_stop_action = self._create_start_stop_button_action()
         self.__gui.set_start_stop_command(start_stop_action)
@@ -63,7 +68,7 @@ class BoggleController:
         self.__gui.set_check_command(check_action_1, check_action_2)
 
         # Set the start/stop command to run when the time is over:
-        timer_action = self._create_timer_action()
+        timer_action = self._create_end_timer_action()
         self.__gui.set_end_timer_action_command(timer_action)
 
     def _create_start_stop_button_action(self) -> Callable:
@@ -79,10 +84,10 @@ class BoggleController:
 
         return command
 
-    def _create_timer_action(self) -> Callable:
+    def _create_end_timer_action(self) -> Callable:
         """
-
-        :return:
+        this function creates the fuunction that will be called after timer
+        ends.
         """
         def command():
             self.__board = randomize_board()
@@ -144,7 +149,6 @@ class BoggleController:
     def run(self):
         """
         This function starts the mainloop of the gui.
-
         """
         self.__gui.run()
 

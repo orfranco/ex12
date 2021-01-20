@@ -32,11 +32,15 @@ COURIER_30 = ("Courier", 30)
 COURIER_14 = ("Courier", 14)
 CALIBRI_11 = ("Calibri", 11)
 
-# Styles:
+# Colors:
 BUTTON_HOVER_COLOR = 'sky blue'
 REGULAR_COLOR = 'LightSteelBlue3'
 BUTTON_ACTIVE_COLOR = 'dark turquoise'
-BUTTON_STYLE = {"font": ("Courier", 30),
+SECONDARY_BUTTON_COLOR = "DeepSkyBlue4"
+
+# Styles:
+RAISED = "raised"
+BUTTON_STYLE = {"font": COURIER_30,
                 "borderwidth": 1,
                 "relief": "groove",
                 "bg": REGULAR_COLOR,
@@ -45,15 +49,15 @@ BUTTON_STYLE = {"font": ("Courier", 30),
                 "activebackground": BUTTON_ACTIVE_COLOR}
 START_CLEAR_BUTTON_STYLE = {"font": COURIER_14,
                             "borderwidth": 1,
-                            "relief": "raised",
-                            "bg": "DeepSkyBlue4",
+                            "relief": RAISED,
+                            "bg": SECONDARY_BUTTON_COLOR,
                             "padx": 3,
                             "width": 7,
                             "activebackground": BUTTON_ACTIVE_COLOR}
 CHECK_BUTTON_STYLE = {"font": COURIER_14,
                       "borderwidth": 1,
                       "relief": "raised",
-                      "bg": "DeepSkyBlue4",
+                      "bg": SECONDARY_BUTTON_COLOR,
                       "width": 15, "height": 2,
                       "activebackground": BUTTON_ACTIVE_COLOR}
 
@@ -73,9 +77,14 @@ SCORE_TEXT = "Your Score: {}"
 QUESTION_TEXT = "Do you want to play again?"
 PLAY_AGAIN_BUTTON_STYLE = {'text': 'Yes', 'font': CALIBRI_11, 'width': 4}
 QUIT_BUTTON_STYLE = {'text': 'No', 'font': CALIBRI_11, 'width': 4}
+START_BUTTON_TEXT = "Start"
+STOP_BUTTON_TEXT = "Stop"
+START_GAME_SCORE = "0"
+GAME_ENDED_TITLE = "Game Ended"
 
 # Constants:
 LOGO_IMAGE_FILE = "Files/boggle_img.png"
+MAIN_WINDOW_GEOMETRY = "570x450"
 MAIN_WINDOW_TITLE = "Boggle !!!"
 CHECK_BUTTON_TEXT = "Check!"
 CLEAR_BUTTON_TEXT = "Clear"
@@ -83,6 +92,7 @@ CHAR_INDEX = 0
 COORD_INDEX = 1
 END_TIME = "0:00"
 START_NBA_TIME = "0:11"
+TIMER_UPDATE_RATE = 100
 
 # Button sound effects:
 REGULAR_BUTTON_SOUND = "Files/basic-click-wooden_16.wav"
@@ -108,14 +118,17 @@ class BoggleGui:
             pygame.init()
         self._board = board
         self._timer = timer
-        self._end_timer_action = None
+        self._start_stop_action = None
+        # init main window:
         self._main_window = tk.Tk()
-        self._main_window.geometry("570x450")
+        self._main_window.geometry(MAIN_WINDOW_GEOMETRY)
         self._main_window.title(MAIN_WINDOW_TITLE)
         self._main_window.resizable(False, False)
+        # init widgets:
         self._init_logo()
         self._init_left_frame()
         self._init_right_frame()
+        # pack and center:
         self._pack()
         self._center_main_window()
 
@@ -219,7 +232,7 @@ class BoggleGui:
                                      height=1)
         self._score_label = tk.Label(self._right_frame,
                                      **RIGHT_LABEL_STYLE,
-                                     height=1, text="")
+                                     height=1)
 
         self._create_start_clear_frame()
 
@@ -239,7 +252,7 @@ class BoggleGui:
                                        text=CLEAR_BUTTON_TEXT,
                                        **START_CLEAR_BUTTON_STYLE)
         self._start_button = tk.Button(self._start_clear_frame,
-                                       text="Start",
+                                       text=START_BUTTON_TEXT,
                                        **START_CLEAR_BUTTON_STYLE)
 
     def _create_words_list_frame(self):
@@ -293,11 +306,11 @@ class BoggleGui:
         :param new_board: The board of the new game.
         """
         # Start the game:
-        if self._start_button["text"] == "Start":
+        if self._start_button["text"] == START_BUTTON_TEXT:
             # Initializing the text on the labels of the games:
-            self._start_button["text"] = "Stop"
+            self._start_button["text"] = STOP_BUTTON_TEXT
             self._found_words_list.delete(0, tk.END)
-            self._score_label["text"] = "0"
+            self._score_label["text"] = START_GAME_SCORE
             # Reveal the characters on the grid:
             for button, button_data in self._grid_buttons_to_data.items():
                 button["text"] = button_data[CHAR_INDEX]
@@ -313,7 +326,7 @@ class BoggleGui:
         This method stops the game and prepares the GUI for a new game.
         :param new_board: A new board for the next game.
         """
-        self._start_button["text"] = "Start"
+        self._start_button["text"] = START_BUTTON_TEXT
         self._board = new_board
 
         # Clear labels:
@@ -343,11 +356,11 @@ class BoggleGui:
         # If the timer hasn't reached 0 - keep animating:
         if self._timer_label["text"] != END_TIME:
             self._timer_animator_id = \
-                self._main_window.after(100, self._animate_timer)
+                self._main_window.after(TIMER_UPDATE_RATE, self._animate_timer)
             if self._timer_label["text"] == START_NBA_TIME:
                 self.play_button_sound(NBA_SOUND, NBA_CHANNEL, NBA_VOLUME)
         else:  # The timer has reached 0:
-            self._end_timer_action()
+            self._start_stop_action()
 
     def get_chars_buttons(self) -> Dict[tk.Button, Tuple[str, Tuple[int,int]]]:
         """
@@ -404,7 +417,7 @@ class BoggleGui:
         will be used when the timer has reached 0 (the game has ended).
         :param action: The function that will run when the timer reaches 0.
         """
-        self._end_timer_action = action
+        self._start_stop_action = action
 
     def update_curr_word_label(self, char: str, is_clear=False):
         """
@@ -440,8 +453,7 @@ class BoggleGui:
         """
         popup = tk.Toplevel(self._main_window, bg=REGULAR_COLOR)
         popup.resizable(False, False)
-        popup.wm_title("Game Ended")
-
+        popup.wm_title(GAME_ENDED_TITLE)
         # Make sure its impossible to click on the main window:
         popup.transient(self._main_window)
         popup.grab_set()
@@ -452,7 +464,7 @@ class BoggleGui:
         def play_again():
             """Restarts the game and destroys the popup window."""
             self.play_button_sound(REGULAR_BUTTON_SOUND, clear_mixer=True)
-            self._end_timer_action()
+            self._start_stop_action()
             popup.destroy()
 
         def quit_cmd():
