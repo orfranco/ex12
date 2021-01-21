@@ -38,11 +38,14 @@ def is_valid_path(board: List[List[str]],
                   path: List[Tuple[int, int]],
                   words: Dict) -> Optional[str]:
     """
-    This function checks if the given path (list of coordinates on the board).
-    :param board:
-    :param path:
-    :param words:
-    :return:
+    This function checks if the given path (list of coordinates on the board)
+    is a valid path on the board, and if it represents a valid word in the
+    given words dictionary.
+    :param board: The board. a 2 dimensional list.
+    :param path: list of coordinates on the board, each coord represents a
+                specific character.
+    :param words: A dictionary with all possible valid words.
+    :return: The word (string) if its valid, or None otherwise.
     """
     word: str = ""
 
@@ -119,7 +122,6 @@ def find_length_n_words(n: int, board: List[List[str]], words: Dict):
 
     # start the helper function, from any coordinate in the board:
     if MIN_WORD_LENGTH <= n <= MAX_WORD_LENGTH:
-        # TODO: validate the board is a square.
         for row in range(len(board)):
             for col in range(len(board)):
                 all_valid_paths.extend(

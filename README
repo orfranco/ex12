@@ -1,4 +1,4 @@
-Features:
-    - Sound effects (Wait for the last 10 seconds of the game ;))
+Additional features:
+    - Sound effects: ** Requires pygame **
+        (Wait for the last 10 seconds of the game ;))
     - Usage of keyboard strokes to check to chosen word.
-    - GUI design (added logo).

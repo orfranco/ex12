@@ -73,7 +73,7 @@ class BoggleController:
 
     def _create_start_stop_button_action(self) -> Callable:
         """
-        this function creates and returns a function that calls the start_stop
+        Creates and returns a function that calls the start_stop
         game functions on the logic and gui classes.
         """
         def command():
@@ -86,8 +86,7 @@ class BoggleController:
 
     def _create_end_timer_action(self) -> Callable:
         """
-        this function creates the fuunction that will be called after timer
-        ends.
+        Creates the function that will be called after timer ends.
         """
         def command():
             self.__board = randomize_board()
@@ -99,10 +98,10 @@ class BoggleController:
     def _create_grid_button_action(self, coord: Tuple[int, int], button: Any) \
             -> Callable:
         """
-        this function creates and returns a function that calls the updating
+        Creates and returns a function that calls the updating
         current word functions from the logic and gui classes.
-        :param coord: the coord thats been clicked.
-        :param button: the button thats been clicked.
+        :param coord: the coord  of the button that has been clicked.
+        :param button: the button that has been clicked.
         """
         def command():
             if button["text"]:
@@ -114,7 +113,7 @@ class BoggleController:
 
     def _create_clear_button_action(self) -> Callable:
         """
-        this function creates and returns a function that calls the clear
+        Creates and returns a function that calls the clear
         current word functions from the logic and gui classes.
         """
         def command():
@@ -125,7 +124,7 @@ class BoggleController:
 
     def _create_check_actions(self) -> Tuple[Callable, Callable]:
         """
-        this function creates and returns a function that calls the submit
+        Creates and returns a function that calls the submit
         current word functions from the logic and gui classes.
         :return: 2 functions:
         One that will be connected to the check button of the GUI,

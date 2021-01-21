@@ -79,7 +79,6 @@ PLAY_AGAIN_BUTTON_STYLE = {'text': 'Yes', 'font': CALIBRI_11, 'width': 4}
 QUIT_BUTTON_STYLE = {'text': 'No', 'font': CALIBRI_11, 'width': 4}
 START_BUTTON_TEXT = "Start"
 STOP_BUTTON_TEXT = "Stop"
-START_GAME_SCORE = "0"
 GAME_ENDED_TITLE = "Game Ended"
 
 # Constants:
@@ -93,6 +92,7 @@ COORD_INDEX = 1
 END_TIME = "0:00"
 START_NBA_TIME = "0:11"
 TIMER_UPDATE_RATE = 100
+START_GAME_SCORE = "0"
 
 # Button sound effects:
 REGULAR_BUTTON_SOUND = "Files/basic-click-wooden_16.wav"
